@@ -14,9 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    login.cpp
+    settingdialog.cpp \
+    lib/cookieutil.cpp \
+    lib/xware.cpp
 
 HEADERS  += mainwindow.h \
-    login.h
+    lib/xware_type.h \
+    settingdialog.h \
+    lib/cookieutil.h \
+    lib/xware.h
 
 FORMS    += mainwindow.ui
