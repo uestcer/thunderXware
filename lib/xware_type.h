@@ -37,4 +37,47 @@ struct PeerList
 
 };
 
+//内容有点多，我们用到什么再填什么算了
+struct DownloadTask {
+    int failCode;
+    struct Channel_struct {
+        bool available;
+        int failCode;
+        int opened;
+        int type;
+        quint64 dlBytes;
+        quint64 speed;
+
+    };
+    Channel_struct vipChannel_struct;
+    QString name;//下载文件名
+    QString url;//下载文件的下载地址
+    quint64 speed;
+    Channel_struct lixianChannel;
+    quint64 downTime;
+    //sublist 不知具体内容
+    quint64 createTime;
+    int state;
+    quint64 remainTime;
+    int progress;
+    QString path;//映射地址
+    int type;
+    int id;
+    quint64 completeTime;
+    quint64 size;//文件大小(字节）
+
+};
+
+struct DownloaderTaskStatus {
+
+    int recycleNum;
+    int serverFailNum;
+    int completeNum;//下载完成数量
+    int sync;
+    QList<DownloadTask> tasks;
+    int dlNum;//还没下载完完成任务的任务数
+
+
+};
+
 #endif // XWARE_TYPE_H

@@ -23,6 +23,7 @@ Xware::Xware(QObject *parent): QObject(parent)
     connect(this,&Xware::listPeerFinished,this,&Xware::cycleListPeer);
     connect(this, &Xware::loginFinish,this,&Xware::checkLoginStatus);//用于检验登录状态
     connect(this, &Xware::onCheckPost,this,&Xware::signin);//登录前检验准备
+    connect(this,&Xware::hasDownloader,this,&Xware::list);//下载器任务
 }
 
 void Xware::login(const QString &userName,const  QString &rawPassword)
@@ -272,6 +273,72 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
     emit listPeerFinished();
     reply->deleteLater();
 
+}
+void Xware::list(QList<PeerList> &peerList) {
+    qDebug()<<"Xware::list():"<<peerList.at(0).pid;
+
+    //假设只有一个下载器
+    QString args="/list?&type=0&pos=0&number=8&needUrl=1&v=2&ct=0&pid="+
+            peerList.at(0).pid;
+
+    if(manager[5] ==NULL) {
+
+        manager[5]=new QNetworkAccessManager(this);
+        connect(manager[5],SIGNAL(finished(QNetworkReply*)),
+                this,SLOT(listReplyFinished(QNetworkReply *)) );
+    }
+
+
+    QNetworkRequest request;
+    request.setRawHeader("Cookie",cookieString.toLatin1());
+    request.setUrl(QUrl(API_PROTOCOLS_URL+args));
+
+    manager[5]->get(request);
+}
+void Xware::listReplyFinished(QNetworkReply *reply) {
+
+    QTextCodec *codec = QTextCodec::codecForName("utf-8");
+    QString all = codec->toUnicode(reply->readAll());
+
+    QJsonParseError parseer;
+    QVariant result = QJsonDocument::fromJson(all.toUtf8(),&parseer).toVariant();
+    if(parseer.error == QJsonParseError::NoError) {
+        QVariantMap obj = result.toMap();
+        DownloaderTaskStatus task;
+        task.completeNum=obj["completeNum"].toInt();
+        task.dlNum = obj["dlNum"].toInt();
+        task.recycleNum=obj["recycleNum"].toInt();
+        task.serverFailNum=obj["serverFailNum"].toInt();
+        task.sync = obj["sync"].toInt();
+        QVariantList taskList = obj["tasks"].toList();
+
+        foreach(const QVariant &item,taskList) {
+            //vip和离线通道没有赋值
+            QVariantMap m = item.toMap();
+            DownloadTask dt;
+            dt.completeTime = m["completeTime"].toULongLong();
+            dt.createTime = m["createTime"].toULongLong();
+            dt.downTime = m["downTime"].toULongLong();
+            dt.failCode = m["failCode"].toInt();
+            dt.id = m["id"].toInt();
+            dt.name = m["name"].toString();//下载文件名
+            dt.path = m["path"].toString();//下载文件地址
+            dt.progress = m["progress"].toInt();
+            dt.size = m["size"].toULongLong();
+            dt.speed = m["speed"].toULongLong();
+            dt.state = m["state"].toInt();
+            dt.type = m["type"].toInt();
+            dt.url = m["url"].toString();
+            task.tasks.append(dt);
+
+
+        }
+        downloadTaskStatus = task;
+
+        emit listFinished(task);
+
+    }
+    reply->deleteLater();
 }
 
 void Xware::cycleListPeer() {

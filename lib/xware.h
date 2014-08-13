@@ -62,14 +62,15 @@ private:
      * 2.登录后检验
      * 3.访问首页
      * 4.listPeer检查下载器的状态
+     * 5.list检查下载器任务
      */
-    static const size_t XWARE_MANAGER_ARRAY_SIZE = 5;
+    static const size_t XWARE_MANAGER_ARRAY_SIZE = 6;
     QNetworkAccessManager *manager[XWARE_MANAGER_ARRAY_SIZE];
     QList<QNetworkCookie>  *cookieList;
     QString cookieString;
     User *user;
     QList<PeerList> peerList;
-
+    DownloaderTaskStatus downloadTaskStatus;
 
 signals:
     void onCheckPost();
@@ -81,6 +82,7 @@ signals:
     void noDownloader();
     void listPeerFinished();//处理完peerlist的json数据;
     void needCheckResult(); //要验证码
+    void listFinished(DownloaderTaskStatus &);//list解析完成
 private slots:
     //登录前check接收完成
     void checkReplyFinished(QNetworkReply *);
@@ -89,10 +91,11 @@ private slots:
     //登录后状态检验完成（还没发现有用）
     void statusReplyFinished(QNetworkReply*);
     void goToHomePageReplyFinished(QNetworkReply*);
-    void listPeerReplyFinished(QNetworkReply *reply);
     void listPeer();
+    void listPeerReplyFinished(QNetworkReply *reply);
     void cycleListPeer();//启动周期性listPeer();
-
+    void list(QList<PeerList>&peerList);//轮询当前下载器的任务，这里假设只有一个下载器
+    void listReplyFinished(QNetworkReply *reply);
 
 };
 
