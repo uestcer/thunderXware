@@ -4,3 +4,4 @@ Terminal::Terminal(QObject *parent) :
     QObject(parent)
 {
 }
+

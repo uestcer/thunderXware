@@ -1,3 +1,7 @@
+/*
+ *功能：总控制端
+ *
+ */
 #ifndef TERMINAL_H
 #define TERMINAL_H
 

@@ -1,6 +1,9 @@
 #ifndef XWARE_H
 #define XWARE_H
 #include <QCryptographicHash>
+#include <QTextCodec>
+#include <QJsonDocument>
+#include <QVariantMap>
 #include <string>
 #include <QString>
 #include <QVariant>
@@ -9,12 +12,16 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkCookie>
-#include "lib/xware_type.h"
 #include <QList>
 #include <vector>
 #include <list>
 #include <unistd.h>
+#include <QTimer>
+#include <QEventLoop>
+#include <QNetworkCookieJar>
+
 #include "lib/cookieutil.h"
+#include "lib/xware_type.h"
 using namespace std;
 
 class Xware:public QObject
@@ -25,7 +32,11 @@ public:
 
     void login(const QString &userName,const QString &rawPassword);
 
-
+    QList<PeerList> &getPeerList() { return peerList  ;}
+    void setPeerList(const QList<PeerList> &peers) {
+        peerList.clear();
+        peerList.append(peers);
+    }
     void test();
 
 private:
@@ -43,21 +54,33 @@ private:
 
     //检验登录状态
     void checkLoginStatus();
+
+
     /**
      * 0:登录前检查
      * 1：登录
      * 2.登录后检验
      * 3.访问首页
+     * 4.listPeer检查下载器的状态
      */
-    QNetworkAccessManager *manager[4];
+    static const size_t XWARE_MANAGER_ARRAY_SIZE = 5;
+    QNetworkAccessManager *manager[XWARE_MANAGER_ARRAY_SIZE];
     QList<QNetworkCookie>  *cookieList;
-
+    QString cookieString;
     User *user;
+    QList<PeerList> peerList;
+
+
 signals:
     void onCheckPost();
     void loginFinish();
     void getStatus();
-
+    void loginSuccess();//登录成功
+    void loginFail();//登录失败
+    void hasDownloader(QList<PeerList> &peerList);
+    void noDownloader();
+    void listPeerFinished();//处理完peerlist的json数据;
+    void needCheckResult(); //要验证码
 private slots:
     //登录前check接收完成
     void checkReplyFinished(QNetworkReply *);
@@ -66,6 +89,10 @@ private slots:
     //登录后状态检验完成（还没发现有用）
     void statusReplyFinished(QNetworkReply*);
     void goToHomePageReplyFinished(QNetworkReply*);
+    void listPeerReplyFinished(QNetworkReply *reply);
+    void listPeer();
+    void cycleListPeer();//启动周期性listPeer();
+
 
 };
 

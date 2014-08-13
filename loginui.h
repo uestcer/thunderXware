@@ -14,6 +14,13 @@ class LoginUI : public QDialog
 public:
     explicit LoginUI(QWidget *parent = 0);
     ~LoginUI();
+signals:
+    void login(const QString &userName,const QString &rawPassward);
+public slots:
+     void loginFail();
+private slots:
+    void on_pushButtonLogin_clicked();
+
 
 private:
     Ui::LoginUI *ui;

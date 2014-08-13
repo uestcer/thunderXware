@@ -6,10 +6,14 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-   // MainWindow w;
-    //w.show();
-    Xware *login = new Xware;
-    login->test();
+    MainWindow w;
+    //w.Login();
+     w.show();
+     w.test();
+
+     //Xware *login = new Xware;
+     //login->test();
+
 
     return a.exec();
 }
