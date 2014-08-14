@@ -70,7 +70,7 @@ private:
     QString cookieString;
     User *user;
     QList<PeerList> peerList;
-    DownloaderTaskStatus downloadTaskStatus;
+    DownloadTaskStatus downloadTaskStatus;
 
 signals:
     void onCheckPost();
@@ -82,7 +82,7 @@ signals:
     void noDownloader();
     void listPeerFinished();//处理完peerlist的json数据;
     void needCheckResult(); //要验证码
-    void listFinished(DownloaderTaskStatus &);//list解析完成
+    void listFinished(DownloadTaskStatus );//list解析完成
 private slots:
     //登录前check接收完成
     void checkReplyFinished(QNetworkReply *);

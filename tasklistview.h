@@ -38,16 +38,33 @@ public:
     void setVerticalHeaderList(QStringList verticalHeaderList);
     void setModalDatas(QList<QStringList> * rowList);
     void refrushModel();
+    QMap<QString,Qt::CheckState> & getCheckStateMap() {
+        return check_state_map ;
+    }
+    void setCheckStateMap(const QMap<QString,Qt::CheckState> *state) {
+        check_state_map = *state;
+    }
+    void setLocate(const QVector<QString> *l)  {
+        locate = *l;
+    }
+    void setTask(const QMap<QString,QString> *t) {
+         task= *t;
+    }
+
 signals:
     void updateCount(int count);
 private:
     QStringList horizontal_header_list;
     QStringList vertical_header_list;
     QList<QStringList>  *arr_row_list;
-    //<行号，复选框状态>
-    QMap<int, Qt::CheckState> check_state_map;//记录着复选框的状态
-    // <行号,pid_state>,要用pid_state构成url对下载任务进行操作
-    QMap<int,QString> task;
+
+    //<id,状态>
+    QMap<QString, Qt::CheckState> check_state_map;//记录着复选框的状态
+
+    //<id>
+    QVector<QString> locate;
+    // <pid,pid_state>,要用pid_state构成url对下载任务进行操作
+    QMap<QString,QString> task;
 };
 
 
@@ -61,7 +78,11 @@ public:
     ~TaskListView(void);
     void addRow(QStringList rowList);
     int rowCount();
-    void updateAllData(QList<QStringList> grid_list);
+    void updateAllData(const QList<QStringList> *grid_list,
+                       const QMap<QString, QString> *task,
+                       const QVector<QString> *locate);
+
+
 signals:
    // void updateCount(int count);
 public slots:

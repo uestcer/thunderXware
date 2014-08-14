@@ -28,8 +28,13 @@ void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
     QList<QStringList> grid;
     QList<DownloadTask> &tasks = taskList.tasks;
 
-    foreach(DownloadTask item,tasks) {
+    // <pid,pid_state>,
+    QMap<QString,QString> task;
+    //<id>
+    QVector<QString> locate;
+    for(int i = 0;i<tasks.size();i++) {
         QStringList row;
+        DownloadTask item = tasks.at(i);
         int time=item.remainTime/3600;
 
 
@@ -40,10 +45,14 @@ void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
 
            <<perfectSize(item.speed)+"/s"//速度
            <<perfectState(item.state);//剩余时间
+
         grid.append(row);
+        locate.push_back(item.id);
+        task[item.id] = item.id+"_"+item.state;
+
 
     }
-    taskListView->updateAllData(grid);
+    taskListView->updateAllData(&grid,&task,&locate);
 
 
 }

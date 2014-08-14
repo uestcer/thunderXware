@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loginUI = new LoginUI(this);
     connect(xware,&Xware::hasDownloader,
             this,&MainWindow::addDownloader);
+
     connect(ui->cmbDownloaders, SIGNAL(activated(int)),
             ui->stackedWidget, SLOT(setCurrentIndex(int)));
 }
@@ -23,6 +24,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::Login()
 {
+    qDebug()<<"MainWindow::Login()";
     //接收来自LoginUI的登录click
     connect(loginUI,&LoginUI::login,xware,&Xware::login);
     //登录成功，关联的是coreCycle
@@ -56,7 +58,9 @@ void MainWindow::addDownloader(QList<PeerList>& newDownloaders) {
 
 void MainWindow::test() {
     DownLoaderUI *widget = new DownLoaderUI;
-    ui->stackedWidget->addWidget(widget);
-    widget->test();
+   // ui->stackedWidget->addWidget(widget);
+    //listFinished(DownloaderTaskStatus &);
+    connect(xware,&Xware::listFinished,widget,&DownLoaderUI::updateTaskView);
+   // widget->test();
     widget->show();
 }

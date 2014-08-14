@@ -49,7 +49,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>wuzhizhan1234@qq.com</string>
+    <string>unix@qq.com</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="lineEditPassword">

@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.Login();
-    // w.show();
-    // w.test();
+    //w.show();
+    w.test();
 
      //Xware *login = new Xware;
      //login->test();

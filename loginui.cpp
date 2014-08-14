@@ -15,6 +15,7 @@ LoginUI::~LoginUI()
 
 void LoginUI::on_pushButtonLogin_clicked()
 {
+    qDebug()<<"loginUI";
     emit login(ui->lineEdituserName->text().trimmed(),
                ui->lineEditPassword->text().trimmed());
     ui->pushButtonLogin->setDisabled(true);

@@ -113,8 +113,9 @@ QVariant TaskListModel::data(const QModelIndex &index, int role) const
     } else if(role == Qt::CheckStateRole){
         //第7列显示check_box
         if(index.column() == 6) {
-            if(check_state_map.contains(index.row()))
-                return check_state_map[index.row()] == Qt::Checked ? Qt::Checked : Qt::Unchecked;
+            //task[index.row()]得到的是下载任务的id号
+            if(check_state_map.contains(locate[index.row()]))
+                return check_state_map[locate[index.row()]] == Qt::Checked ? Qt::Checked : Qt::Unchecked;
 
             return Qt::Unchecked;
         }
@@ -171,7 +172,7 @@ bool TaskListModel::setData( const QModelIndex &index, const QVariant &value, in
 
         if (role == Qt::CheckStateRole && index.column() == 6)
         {
-                check_state_map[index.row()] = (value == Qt::Checked ?
+                check_state_map[locate[index.row()]] = (value == Qt::Checked ?
                                                     Qt::Checked : Qt::Unchecked);
                 qDebug()<<"checkbox";
         }
@@ -299,9 +300,23 @@ void TaskListView::initHeader()
 }
 
 //更新整个视图
-void TaskListView::updateAllData(QList<QStringList> grid_list)
+void TaskListView::updateAllData(const QList<QStringList> *grid_list,
+                                 const QMap<QString,QString> *task,
+                                 const QVector<QString> *locate)
 {
-    grid_data_list = grid_list;
+    QMap<QString,Qt::CheckState> state = model->getCheckStateMap();
+    QMap<QString,Qt::CheckState> newState;
+    int size = locate->size();//有多少行
+    for(int i = 0;i<size;i++) {
+        QString id = (*locate)[i];
+        if((state[id]==Qt::Checked)) {
+            newState[id] = Qt::Checked;
+        }
+    }
+    model->setCheckStateMap(&newState);
+    model->setLocate(locate);
+    model->setTask(task);
+    grid_data_list = *grid_list;
     model->refrushModel();
 
 }

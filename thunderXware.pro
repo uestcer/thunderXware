@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     lib/xware.cpp \
     terminal.cpp \
     loginui.cpp \
-    downloaderui.cpp
+    downloaderui.cpp \
+    tasklistview.cpp
 
 HEADERS  += mainwindow.h \
     lib/xware_type.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     lib/xware.h \
     terminal.h \
     loginui.h \
-    downloaderui.h
+    downloaderui.h \
+    tasklistview.h
 
 FORMS    += mainwindow.ui \
     loginui.ui \

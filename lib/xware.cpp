@@ -53,6 +53,7 @@ QString Xware::encryPassword(const QString &rawPassword,const QString &verCode)
 
 void Xware::check(QString &url)
 {
+    qDebug()<<"check";
     if(manager[0]==NULL) {
         manager[0] = new QNetworkAccessManager(this);
 
@@ -64,6 +65,8 @@ void Xware::check(QString &url)
 
 void Xware::checkReplyFinished(QNetworkReply *reply)
 {
+    qDebug()<<"checkFinish";
+
     QVariant variantCookies = reply->header(QNetworkRequest::SetCookieHeader);
 
     QList<QNetworkCookie> cookies = qvariant_cast<QList<QNetworkCookie> >(variantCookies);
@@ -73,6 +76,7 @@ void Xware::checkReplyFinished(QNetworkReply *reply)
     if(check_result=="1") {
         //要输入验证码
         emit needCheckResult();
+        qDebug()<<"需要验证码";
         return ;
     }else {
 
@@ -299,12 +303,12 @@ void Xware::listReplyFinished(QNetworkReply *reply) {
 
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QString all = codec->toUnicode(reply->readAll());
-
+    qDebug()<<all;
     QJsonParseError parseer;
     QVariant result = QJsonDocument::fromJson(all.toUtf8(),&parseer).toVariant();
     if(parseer.error == QJsonParseError::NoError) {
         QVariantMap obj = result.toMap();
-        DownloaderTaskStatus task;
+        DownloadTaskStatus task;
         task.completeNum=obj["completeNum"].toInt();
         task.dlNum = obj["dlNum"].toInt();
         task.recycleNum=obj["recycleNum"].toInt();
@@ -320,7 +324,7 @@ void Xware::listReplyFinished(QNetworkReply *reply) {
             dt.createTime = m["createTime"].toULongLong();
             dt.downTime = m["downTime"].toULongLong();
             dt.failCode = m["failCode"].toInt();
-            dt.id = m["id"].toInt();
+            dt.id = m["id"].toString();
             dt.name = m["name"].toString();//下载文件名
             dt.path = m["path"].toString();//下载文件地址
             dt.progress = m["progress"].toInt();

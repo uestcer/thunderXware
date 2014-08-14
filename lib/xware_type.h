@@ -59,16 +59,16 @@ struct DownloadTask {
     quint64 createTime;
     int state;
     quint64 remainTime;
-    int progress;
+    int progress;//进度
     QString path;//映射地址
     int type;
-    int id;
+    QString id;
     quint64 completeTime;
     quint64 size;//文件大小(字节）
 
 };
 
-struct DownloaderTaskStatus {
+struct DownloadTaskStatus {
 
     int recycleNum;
     int serverFailNum;
