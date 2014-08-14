@@ -1,9 +1,13 @@
 #include "tasklistview.h"
+#include <QDebug>
+#include <QRect>
+#include <QStyledItemDelegate>
 /*****************delegate***************/
 TaskListDelegate::TaskListDelegate(QObject *parent):QItemDelegate(parent)
 {
     //empty
 }
+
 
 void TaskListDelegate::paint(QPainter *painter,
                              const QStyleOptionViewItem &option,
@@ -11,7 +15,8 @@ void TaskListDelegate::paint(QPainter *painter,
 {
     if(index.column() == 2)
     {
-        int progress = index.model ()->data(index, Qt::DisplayRole).toInt ();
+        //进度条
+        double progress = index.model ()->data(index, Qt::DisplayRole).toDouble();
         QStyleOptionProgressBarV2 progressBarOption;
         progressBarOption.state = QStyle:: State_Enabled;
         progressBarOption.direction = QApplication:: layoutDirection ();
@@ -22,7 +27,9 @@ void TaskListDelegate::paint(QPainter *painter,
         progressBarOption.textAlignment = Qt:: AlignCenter;
         progressBarOption.textVisible = true;
         progressBarOption.progress = progress;
-        progressBarOption.text = QString("%1%").arg(progressBarOption.progress);
+
+        progressBarOption.text = QString::number(progress)+" %";
+
         QApplication:: style ()->drawControl(QStyle::CE_ProgressBar, &progressBarOption, painter);
     } else {
         return QItemDelegate::paint (painter, option, index);
@@ -102,6 +109,15 @@ QVariant TaskListModel::data(const QModelIndex &index, int role) const
         if(index.column() >= arr_row_list->at(0).size())
             return QVariant();
         return arr_row_list->at(index.row()).at(index.column());
+
+    } else if(role == Qt::CheckStateRole){
+        //第7列显示check_box
+        if(index.column() == 6) {
+            if(check_state_map.contains(index.row()))
+                return check_state_map[index.row()] == Qt::Checked ? Qt::Checked : Qt::Unchecked;
+
+            return Qt::Unchecked;
+        }
     }
     return QVariant();
 
@@ -136,8 +152,31 @@ Qt::ItemFlags TaskListModel::flags(const QModelIndex &index) const
 {
     if(!index.isValid())
         return Qt::NoItemFlags;
-    Qt::ItemFlags flag = QAbstractItemModel::flags(index);
-    return flag;
+
+
+    if(index.column()==6)
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
+
+ // Qt::ItemFlags flag = QAbstractItemModel::flags(index);
+ //   return flag;
+
+}
+
+bool TaskListModel::setData( const QModelIndex &index, const QVariant &value, int role )
+{
+        if(!index.isValid())
+                return false;
+
+        if (role == Qt::CheckStateRole && index.column() == 6)
+        {
+                check_state_map[index.row()] = (value == Qt::Checked ?
+                                                    Qt::Checked : Qt::Unchecked);
+                qDebug()<<"checkbox";
+        }
+
+        return true;
 }
 void TaskListModel::setModalDatas(QList<QStringList> *rowList)
 {
@@ -163,19 +202,23 @@ TaskListView::TaskListView(QWidget *parent)
     this->horizontalHeader()->setStretchLastSection(true);
     this->horizontalHeader()->setHighlightSections(false);
     this->verticalHeader()->setVisible(false);
-    this->setShowGrid(false);
+    // this->setShowGrid(false);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    // this->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 
     model = new TaskListModel();
     this->setModel(model);
-    this->initHeader();
-
     model->setModalDatas(&grid_data_list);
+
+
     taskListDelegate = new TaskListDelegate();
     this->setItemDelegate(taskListDelegate);
-    connect(model,&TaskListModel::updateCount,this,&TaskListView::updateCount);
+    // this->initHeader();
+
+
+
+    // connect(model,&TaskListModel::updateCount,this,&TaskListView::updateCount);
     this->initHeader();
 
 
@@ -250,15 +293,15 @@ void TaskListView::changeValue()
 void TaskListView::initHeader()
 {
     QStringList header;
-    header<<tr("状态")<<tr("名称")<<tr("进度")<<tr("剩余时间")<<tr("速度");
+    header<<tr("名称")<<tr("大小")<<tr("进度")<<tr("剩余时间")<<tr("速度")<<tr("状态")<<tr("选择");
     model->setHorizontalHeaderList(header);
 
 }
 
 //更新整个视图
-void TaskListView::updateAllData(QList<QStringList> *grid_list)
+void TaskListView::updateAllData(QList<QStringList> grid_list)
 {
-   grid_data_list = *grid_list;
-   model->refrushModel();
+    grid_data_list = grid_list;
+    model->refrushModel();
 
 }

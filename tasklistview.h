@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QHeaderView>
 #include <QApplication>
+#include <QMap>
 //委托
 class TaskListDelegate : public QItemDelegate
 {
@@ -24,13 +25,17 @@ class TaskListModel : public QAbstractTableModel
 public:
     TaskListModel(QObject * parent = 0);
     ~TaskListModel(void);
-    void setHorizontalHeaderList(QStringList horizontalHeaderList);
-    void setVerticalHeaderList(QStringList verticalHeaderList);
+    //继承父类
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool setData( const QModelIndex &index, const QVariant &value, int role );
+
+    //本类新创建
+    void setHorizontalHeaderList(QStringList horizontalHeaderList);
+    void setVerticalHeaderList(QStringList verticalHeaderList);
     void setModalDatas(QList<QStringList> * rowList);
     void refrushModel();
 signals:
@@ -39,6 +44,10 @@ private:
     QStringList horizontal_header_list;
     QStringList vertical_header_list;
     QList<QStringList>  *arr_row_list;
+    //<行号，复选框状态>
+    QMap<int, Qt::CheckState> check_state_map;//记录着复选框的状态
+    // <行号,pid_state>,要用pid_state构成url对下载任务进行操作
+    QMap<int,QString> task;
 };
 
 
@@ -52,9 +61,9 @@ public:
     ~TaskListView(void);
     void addRow(QStringList rowList);
     int rowCount();
-    void updateAllData(QList<QStringList> *grid_list);
+    void updateAllData(QList<QStringList> grid_list);
 signals:
-    void updateCount(int count);
+   // void updateCount(int count);
 public slots:
     void remove();
     void clear();
