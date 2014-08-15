@@ -37,7 +37,7 @@ private:
     Xware *xware; //主要是网络网络协协议的封装
     LoginUI *loginUI;//登录
     DownLoaderUI *downLoaderUI;//下载任务
-    CreateTaskUI *createTaskUI;//创建新任务
+
 
     void initConnectSignal();//大量的connect放在这里
 public slots:

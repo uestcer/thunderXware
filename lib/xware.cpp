@@ -307,10 +307,10 @@ void Xware::list(QList<PeerList> peerList) {
 }
 void Xware::listReplyFinished(QNetworkReply *reply) {
 
-    qDebug()<<"Xware::listReplyFinished()";
+    //qDebug()<<"Xware::listReplyFinished()";
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QString all = codec->toUnicode(reply->readAll());
-    qDebug()<<"listReply:"<<all;
+   // qDebug()<<"listReply:"<<all;
     QJsonParseError parseer;
     QVariant result = QJsonDocument::fromJson(all.toUtf8(),&parseer).toVariant();
     if(parseer.error == QJsonParseError::NoError) {
@@ -361,12 +361,12 @@ void Xware::cycleListPeer() {
 
 }
 void Xware::operateTask(QString args) {
-    qDebug()<<"Xware::operateTask():";
+    //qDebug()<<"Xware::operateTask():";
 
     //假设只有一个下载器
-  //  qDebug()<<"peerList大小"<<peerList.size();
-   // if(peerList.size()<=0)
-    //    return;
+    //  qDebug()<<"peerList大小"<<peerList.size();
+    if(peerList.size()<=0)
+        return;
     QString CompleArgs=args+"&v=2&ct=0&pid="+peerList.at(0).pid;
 
     if(manager[6] ==NULL) {
@@ -386,6 +386,58 @@ void Xware::operateTask(QString args) {
 void Xware::operateTaskReplyFinished(QNetworkReply *reply) {
     qDebug()<<"Xware::operateTaskReplyFinished";
     emit operateTaskFinish();
+}
+
+
+//用post方法创建
+void Xware::createTask(QString args, QString url, QString taskName)
+{
+
+    //qDebug()<<"Xware::createNewTask():"<<args<<" "<<url<<" "<<taskName;
+    if(peerList.size()<=0)
+        return;
+    QString CompleArgs=args+"v=2&ct=0&pid="+peerList.at(0).pid;
+
+    if(manager[7] ==NULL) {
+
+        manager[7]=new QNetworkAccessManager(this);
+        connect(manager[7],SIGNAL(finished(QNetworkReply*)),
+                this,SLOT(operateTaskReplyFinished(QNetworkReply*)));
+    }
+
+
+    QNetworkRequest request;
+    request.setRawHeader("Cookie",cookieString.toLatin1());
+    request.setUrl(QUrl(API_PROTOCOLS_URL+CompleArgs));
+
+    /*
+     * name:json
+     * param: path "C:/TDDOWNLOAD/"
+     * tasks:
+     * [{
+     *  "url":"http://....",
+     *  "name":"qq.ext",
+     *  "gcid":"",
+     *  "cid":"",
+     *  "file":0
+     * }]
+     *
+     */
+    //手工构造json
+    QString postData="json={";
+    postData+="\"path\":\"C:/TDDOWNLOAD/\",";
+    postData+="\"tasks\":[{\"url\":\""+url+"\",";
+    postData+="\"name\":\""+taskName+"\",";
+    postData+="\"gcid\":\"\",\"cid\":\"\",";
+    postData+="\"filesize\":0";
+    postData+="}]}";
+    qDebug()<<"json"<<postData;
+    manager[7]->post(request,postData.toUtf8());
+}
+void Xware::createTaskReplyFinished(QNetworkReply *reply)
+{
+    QString all = reply->readAll();
+    qDebug()<<all<<endl;
 }
 
 void Xware::test()

@@ -6,8 +6,9 @@ DownLoaderUI::DownLoaderUI(QWidget *parent) :
     ui(new Ui::DownLoaderUI)
 {
     ui->setupUi(this);
+    createTaskUI = new CreateTaskUI();
 
-   addTaskWindows();
+    addTaskWindows();
 
 
 }
@@ -31,7 +32,10 @@ void DownLoaderUI::addTaskWindows() {
     main_layout->setContentsMargins(20, 20, 20, 20);
 
     this->setLayout(main_layout);
-    connect(add_button,&QPushButton::clicked,this,&DownLoaderUI::addTask);
+    //添加新下载任务
+    connect(add_button,&QPushButton::clicked,createTaskUI,&CreateTaskUI::show);
+    connect(createTaskUI,&CreateTaskUI::createTaskSignal,this,&DownLoaderUI::addTask);
+
     connect(start_button,&QPushButton::clicked,this,&DownLoaderUI::startTask);
     connect(pause_button,&QPushButton::clicked,this,&DownLoaderUI::pauseTask);
     connect(remove_button,&QPushButton::clicked,this,&DownLoaderUI::removeTask);
@@ -41,6 +45,7 @@ DownLoaderUI::~DownLoaderUI()
 {
     delete ui;
     delete taskListView;
+    delete createTaskUI;
 
 }
 //更新下载任务列表显示
@@ -78,6 +83,7 @@ void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
 
 
 }
+
 QString DownLoaderUI::perfectSize(QVariant value) {
     const static double B  = 1024;
     const static double KB = 1024*1024;
@@ -138,7 +144,7 @@ QString DownLoaderUI::perfectState(int state) {
     case 13:
         return "正在上传";
     case 14:
-        return "准备下载";
+        return "等待插入外接存储设备";
     case 15:
         return "已删除";
     case 37:
@@ -151,10 +157,14 @@ QString DownLoaderUI::perfectState(int state) {
     }
 }
 
-void DownLoaderUI::addTask() {
-  //  const static QString args = ""
-}
 
+void DownLoaderUI::addTask(QString url, QString taskName)
+{
+    QString args="/createTask?";
+    emit add_signal(args,url,taskName);
+    qDebug()<<"create New Task";
+
+}
 void DownLoaderUI::startTask() {
     QString args="/start?tasks=";
     args +=taskListView->getCheckBoxSelect();

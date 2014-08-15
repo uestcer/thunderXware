@@ -11,6 +11,7 @@
 #include <QString>
 #include "lib/xware_type.h"
 #include "tasklistview.h"
+#include "createtaskui.h"
 namespace Ui {
 class DownLoaderUI;
 }
@@ -40,13 +41,15 @@ private:
     QString perfectState(int state);
     Ui::DownLoaderUI *ui;
     TaskListView *taskListView;
+
+    CreateTaskUI *createTaskUI;//创建新任务
 //对下载进行操作的三个按钮
     QPushButton *add_button;
     QPushButton *start_button;
     QPushButton *pause_button;
     QPushButton *remove_button;//删除
 signals:
-    void add_signal(QString args);
+    void add_signal(QString args,QString url,QString taskName);
     void start_signal(QString args);
     void pause_signal(QString args);
     void remove_signal(QString args);
@@ -54,7 +57,7 @@ public slots:
     void updateTaskView(DownloadTaskStatus taskList );
 
 private slots:
-    void addTask() ;
+    void addTask(QString url,QString taskName);
     void startTask();
     void pauseTask();
     void removeTask();

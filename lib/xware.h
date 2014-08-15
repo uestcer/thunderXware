@@ -39,6 +39,7 @@ public:
     }*/
     //args是要传入的参数
     void operateTask(QString args);
+    void createTask(QString args,QString url,QString taskName );
     void test();
 signals:
     void onCheckPost();
@@ -66,7 +67,7 @@ private slots:
     void list(QList<PeerList> peerList);//轮询当前下载器的任务，这里假设只有一个下载器
     void listReplyFinished(QNetworkReply *reply);
     void operateTaskReplyFinished(QNetworkReply *reply);
-
+    void createTaskReplyFinished(QNetworkReply *reply);
 private:
     //登录前的判断
     void check(QString &url);
@@ -92,8 +93,9 @@ private:
      * 4.listPeer检查下载器的状态
      * 5.list检查下载器任务
      * 6.对任务进行各种操作（开始暂停的任务，删除，暂停任务等）
+     * 7.创建新下载任务
      */
-    static const size_t XWARE_MANAGER_ARRAY_SIZE = 7;
+    static const size_t XWARE_MANAGER_ARRAY_SIZE = 8;
     QNetworkAccessManager *manager[XWARE_MANAGER_ARRAY_SIZE];
     QList<QNetworkCookie>  *cookieList;
     QString cookieString;
