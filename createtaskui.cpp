@@ -6,6 +6,8 @@ CreateTaskUI::CreateTaskUI(QWidget *parent) :
     ui(new Ui::CreateTaskUI)
 {
     ui->setupUi(this);
+    //根据url产生文件名
+    connect(ui->lineEditUrl,&QLineEdit::textChanged,this,&CreateTaskUI::generateTaskName);
 }
 
 CreateTaskUI::~CreateTaskUI()
@@ -67,6 +69,21 @@ QString CreateTaskUI::createJson(QString url, QString name)
     qDebug()<<str;
     return str;
 
+}
+
+void CreateTaskUI::generateTaskName(const QString &text)
+{
+    QString url = text.trimmed();
+    QString name;
+    int size=url.size();
+    for(int i= size-1;i>=0;i--) {
+        if(url[i]=='/') {
+                break;
+        }
+        name =url[i]+name;
+    }
+    //for(int i= 0;i<name.size();i)
+    ui->lineEditName->setText(name);
 }
 
 

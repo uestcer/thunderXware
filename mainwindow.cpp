@@ -35,6 +35,8 @@ void MainWindow::initConnectSignal() {
     //与各种下载操作相关
 
     connect(downLoaderUI,&DownLoaderUI::add_signal,xware,&Xware::createTask);
+    connect(xware,&Xware::createTaskFailSignal,
+            downLoaderUI,&DownLoaderUI::createTaskResult);
     connect(downLoaderUI,&DownLoaderUI::start_signal,xware,&Xware::operateTask);
     connect(downLoaderUI,&DownLoaderUI::pause_signal,xware,&Xware::operateTask);
     connect(downLoaderUI,&DownLoaderUI::remove_signal,xware,&Xware::operateTask);

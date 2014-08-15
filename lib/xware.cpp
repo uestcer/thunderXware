@@ -9,8 +9,8 @@ static const QString API_LOGIN_URL="http://login.xunlei.com/sec2login";
 static const QString API_AFTERLOGIN_URL="http://stat.login.xunlei.com:1800/report?cnt=1&cmdid=sec2login&errorcode=0&responsetime=1&retrynum=0&serverip=&url=&domain=&b_type=113&platform=1&clientversion=";
 static const QString API_HOMEPAGE_URL="http://yuancheng.xunlei.com";
 static const QString API_PROTOCOLS_URL_REMOTE="http://homecloud.yuancheng.xunlei.com";
-static const QString API_PROTOCOLS_URL="http://homecloud.yuancheng.xunlei.com";
-//static const QString API_PROTOCOLS_URL = "http://localhost:9000";
+//static const QString API_PROTOCOLS_URL="http://homecloud.yuancheng.xunlei.com";
+static const QString API_PROTOCOLS_URL = "http://localhost:1111";
 Xware::Xware(QObject *parent): QObject(parent)
 {
     //将manager初始化为空指针
@@ -54,7 +54,7 @@ QString Xware::encryPassword(const QString &rawPassword,const QString &verCode)
 
 void Xware::check(QString &url)
 {
-    qDebug()<<"check";
+
     if(manager[0]==NULL) {
         manager[0] = new QNetworkAccessManager(this);
 
@@ -66,7 +66,7 @@ void Xware::check(QString &url)
 
 void Xware::checkReplyFinished(QNetworkReply *reply)
 {
-    qDebug()<<"checkFinish";
+
 
     QVariant variantCookies = reply->header(QNetworkRequest::SetCookieHeader);
 
@@ -91,8 +91,7 @@ void Xware::checkReplyFinished(QNetworkReply *reply)
         }
         user->verifyKey=tmp;
 
-        qDebug()<<"verify_code="<<tmp;
-        qDebug()<<"raw_verify_code="<<a;
+
 
 
         emit onCheckPost();
@@ -111,7 +110,7 @@ void Xware::signin()
     qDebug()<<"signin():正在登录......";
 
     user->password=encryPassword(user->rawPassword,user->verifyKey);
-    qDebug()<<"password="<<user->password;
+
     if(manager[1]==NULL) {
         manager[1]=new QNetworkAccessManager(this);
         connect(manager[1], SIGNAL(finished(QNetworkReply*)),
@@ -165,13 +164,13 @@ void Xware::checkLoginStatus() {
     }else {
         //发送登录失败信号
         qDebug()<<"登录失败";
-        qDebug()<<"用户名:"<<user->userName<<"原始密码:"<<user->rawPassword;
+
         //清空原来的cookies
         cookieList->clear();
         emit loginFail();
 
     }
-    qDebug()<<"blogresult:"<<status;
+
 }
 
 
@@ -186,9 +185,9 @@ void Xware::status() {
 }
 
 void Xware::statusReplyFinished(QNetworkReply *reply ) {
-    qDebug()<<"get status reply";
+
     QString content = reply->readAll();
-    qDebug()<<content;
+
 
     emit getStatus();
 }
@@ -237,7 +236,7 @@ void Xware::listPeer() {
 
 void Xware::listPeerReplyFinished(QNetworkReply *reply)
 {
-    qDebug()<<"receive listPeer ";
+
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QString all = codec->toUnicode(reply->readAll());
     qDebug()<<"Xware::listPeer"<<all;
@@ -269,20 +268,20 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
 
             peerList = peers;
 
-            qDebug()<<"have downloader";
-            emit hasDownloader(peers);
+
+            emit hasDownloader();
         }
         else {
             //没有配置下载器
             emit noDownloader();
-            qDebug()<<"no downloader";
+
         }
     }
     emit listPeerFinished();
     reply->deleteLater();
 
 }
-void Xware::list(QList<PeerList> peerList) {
+void Xware::list() {
     if(peerList.size()<=0)
         return;
 
@@ -302,7 +301,7 @@ void Xware::list(QList<PeerList> peerList) {
     QNetworkRequest request;
     request.setRawHeader("Cookie",cookieString.toLatin1());
     request.setUrl(QUrl(API_PROTOCOLS_URL+args));
-    qDebug()<<API_PROTOCOLS_URL+args;
+
     manager[5]->get(request);
 }
 void Xware::listReplyFinished(QNetworkReply *reply) {
@@ -310,7 +309,7 @@ void Xware::listReplyFinished(QNetworkReply *reply) {
     //qDebug()<<"Xware::listReplyFinished()";
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QString all = codec->toUnicode(reply->readAll());
-   // qDebug()<<"listReply:"<<all;
+    // qDebug()<<"listReply:"<<all;
     QJsonParseError parseer;
     QVariant result = QJsonDocument::fromJson(all.toUtf8(),&parseer).toVariant();
     if(parseer.error == QJsonParseError::NoError) {
@@ -384,8 +383,10 @@ void Xware::operateTask(QString args) {
     manager[6]->get(request);
 }
 void Xware::operateTaskReplyFinished(QNetworkReply *reply) {
-    qDebug()<<"Xware::operateTaskReplyFinished";
+
     emit operateTaskFinish();
+    //手工调用更新列表
+    list();
 }
 
 
@@ -393,7 +394,7 @@ void Xware::operateTaskReplyFinished(QNetworkReply *reply) {
 void Xware::createTask(QString args, QString url, QString taskName)
 {
 
-    //qDebug()<<"Xware::createNewTask():"<<args<<" "<<url<<" "<<taskName;
+
     if(peerList.size()<=0)
         return;
     QString CompleArgs=args+"v=2&ct=0&pid="+peerList.at(0).pid;
@@ -402,13 +403,15 @@ void Xware::createTask(QString args, QString url, QString taskName)
 
         manager[7]=new QNetworkAccessManager(this);
         connect(manager[7],SIGNAL(finished(QNetworkReply*)),
-                this,SLOT(operateTaskReplyFinished(QNetworkReply*)));
+                this,SLOT(createTaskReplyFinished(QNetworkReply*)));
     }
 
 
     QNetworkRequest request;
+    request.setHeader(QNetworkRequest::ContentTypeHeader,
+                      QVariant("application/x-www-form-urlencoded"));
     request.setRawHeader("Cookie",cookieString.toLatin1());
-    request.setUrl(QUrl(API_PROTOCOLS_URL+CompleArgs));
+    request.setUrl(QUrl(API_PROTOCOLS_URL_REMOTE+CompleArgs));
 
     /*
      * name:json
@@ -431,13 +434,39 @@ void Xware::createTask(QString args, QString url, QString taskName)
     postData+="\"gcid\":\"\",\"cid\":\"\",";
     postData+="\"filesize\":0";
     postData+="}]}";
-    qDebug()<<"json"<<postData;
+
     manager[7]->post(request,postData.toUtf8());
 }
 void Xware::createTaskReplyFinished(QNetworkReply *reply)
 {
     QString all = reply->readAll();
-    qDebug()<<all<<endl;
+    QJsonParseError parseerr;
+    QVariant result =  QJsonDocument::fromJson(all.toUtf8(),&parseerr).toVariant();
+    if(parseerr.error == QJsonParseError::NoError) {
+        QVariantMap obj = result.toMap();
+        if(obj["rnt"].toInt()==0) {
+            QVariantList tasks = obj["tasks"].toList();
+            //只进行一项任务
+            foreach (const QVariant &item,tasks) {
+                QVariantMap task  = item.toMap();
+                if(task["result"].toInt()==0) {
+                    //emit createTaskResultSignal(tr("创建成功"));
+
+                }else if(task["result"].toInt()==202) {
+                    emit createTaskFailSignal(tr("已存在相同任务"));//重复
+
+                }else {
+                    emit createTaskFailSignal(tr("创建失败"));
+                }
+
+            }
+        }
+    }else {
+        emit createTaskFailSignal(tr("创建失败"));
+    }
+
+    //手工调用更新列表
+    list();
 }
 
 void Xware::test()

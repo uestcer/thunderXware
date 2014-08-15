@@ -12,6 +12,13 @@ DownLoaderUI::DownLoaderUI(QWidget *parent) :
 
 
 }
+DownLoaderUI::~DownLoaderUI()
+{
+    delete ui;
+    delete taskListView;
+    delete createTaskUI;
+
+}
 void DownLoaderUI::addTaskWindows() {
     taskListView = new TaskListView();
     add_button = new QPushButton(tr("新建任务"));
@@ -41,13 +48,7 @@ void DownLoaderUI::addTaskWindows() {
     connect(remove_button,&QPushButton::clicked,this,&DownLoaderUI::removeTask);
 }
 
-DownLoaderUI::~DownLoaderUI()
-{
-    delete ui;
-    delete taskListView;
-    delete createTaskUI;
 
-}
 //更新下载任务列表显示
 void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
 {
@@ -184,6 +185,25 @@ void DownLoaderUI::removeTask() {
     args +=taskListView->getCheckBoxSelect();
     emit remove_signal(args);
     qDebug()<<"DownLoaderUI::removeTask"<<args;
+}
+
+void DownLoaderUI::createTaskResult(const QString &info)
+{
+    infoDialog.setWindowTitle(tr("创建任务结果"));
+    infoDialog.resize(200,60);
+
+    infolabel.setText(info);
+
+    infoLayout.addWidget(&infolabel);
+    infoDialog.setLayout(&infoLayout);
+
+    infoDialog.setWindowFlags(Qt::FramelessWindowHint);
+    infoDialog.move(800,90);
+    infoDialog.show();
+
+    QTimer::singleShot(2000, &infoDialog, SLOT(close()));
+
+
 }
 
 void DownLoaderUI::test() {

@@ -23,6 +23,7 @@ private slots:
 private:
     Ui::CreateTaskUI *ui;
     QString createJson(QString url,QString name);
+    void generateTaskName(const QString &text);
 signals:
     void nullUrlNameSignal();
     void createTaskSignal(QString url,QString taskName);

@@ -47,12 +47,13 @@ signals:
     void getStatus();
     void loginSuccess();//登录成功
     void loginFail();//登录失败
-    void hasDownloader(QList<PeerList> peerList);
+    void hasDownloader();
     void noDownloader();
     void listPeerFinished();//处理完peerlist的json数据;
     void needCheckResult(); //要验证码
     void listFinished(DownloadTaskStatus );//list解析完成
     void operateTaskFinish( );//操作完成
+    void createTaskFailSignal(const QString &info);
 private slots:
     //登录前check接收完成
     void checkReplyFinished(QNetworkReply *);
@@ -64,7 +65,7 @@ private slots:
     void listPeer();
     void listPeerReplyFinished(QNetworkReply *reply);
     void cycleListPeer();//启动周期性listPeer();
-    void list(QList<PeerList> peerList);//轮询当前下载器的任务，这里假设只有一个下载器
+    void list();//轮询当前下载器的任务，这里假设只有一个下载器
     void listReplyFinished(QNetworkReply *reply);
     void operateTaskReplyFinished(QNetworkReply *reply);
     void createTaskReplyFinished(QNetworkReply *reply);

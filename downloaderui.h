@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <QDebug>
 #include <QString>
+#include <QDialog>
+#include <QTimer>
 #include "lib/xware_type.h"
 #include "tasklistview.h"
 #include "createtaskui.h"
@@ -48,6 +50,9 @@ private:
     QPushButton *start_button;
     QPushButton *pause_button;
     QPushButton *remove_button;//删除
+    QDialog infoDialog ;
+    QLabel infolabel;
+    QHBoxLayout infoLayout;
 signals:
     void add_signal(QString args,QString url,QString taskName);
     void start_signal(QString args);
@@ -55,12 +60,13 @@ signals:
     void remove_signal(QString args);
 public slots:
     void updateTaskView(DownloadTaskStatus taskList );
-
+    void createTaskResult(const QString &info);
 private slots:
     void addTask(QString url,QString taskName);
     void startTask();
     void pauseTask();
     void removeTask();
+
 
 
 };
