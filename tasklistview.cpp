@@ -320,3 +320,24 @@ void TaskListView::updateAllData(const QList<QStringList> *grid_list,
     model->refrushModel();
 
 }
+
+QString TaskListView::getCheckBoxSelect() {
+    QString args;
+    //<id,状态 >
+    QMap<QString,Qt::CheckState> checkStateMap =model->getCheckStateMap();
+    //<id,id_state>
+    QMap<QString,QString> task = model->getTask();
+    QMap<QString,Qt::CheckState>::iterator iter;
+    int first_flag = true;
+    for(iter = checkStateMap.begin();iter != checkStateMap.end();iter++) {
+        if(iter.value()==Qt::Checked) {
+            if(first_flag) {
+                first_flag = false;
+                args +=task[iter.key()];
+            }else {
+                args +=","+task[iter.key()];
+            }
+        }
+    }
+    return args;
+}

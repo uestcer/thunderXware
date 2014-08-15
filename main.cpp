@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.Login();
     //w.show();
-    w.test();
+   // w.test();
 
      //Xware *login = new Xware;
      //login->test();

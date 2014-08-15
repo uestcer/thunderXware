@@ -8,8 +8,9 @@ static const QString API_LOGIN_URL="http://login.xunlei.com/sec2login";
 //长点不会死人吧？
 static const QString API_AFTERLOGIN_URL="http://stat.login.xunlei.com:1800/report?cnt=1&cmdid=sec2login&errorcode=0&responsetime=1&retrynum=0&serverip=&url=&domain=&b_type=113&platform=1&clientversion=";
 static const QString API_HOMEPAGE_URL="http://yuancheng.xunlei.com";
-
+static const QString API_PROTOCOLS_URL_REMOTE="http://homecloud.yuancheng.xunlei.com";
 static const QString API_PROTOCOLS_URL="http://homecloud.yuancheng.xunlei.com";
+//static const QString API_PROTOCOLS_URL = "http://localhost:9000";
 Xware::Xware(QObject *parent): QObject(parent)
 {
     //将manager初始化为空指针
@@ -226,8 +227,8 @@ void Xware::listPeer() {
 
     QNetworkRequest request;
     request.setRawHeader("Cookie",cookieString.toLatin1());
-    request.setUrl(QUrl(API_PROTOCOLS_URL+args));
-
+    //request.setUrl(QUrl(API_PROTOCOLS_URL+args));
+    request.setUrl(QUrl(API_PROTOCOLS_URL_REMOTE+args));
     manager[4]->get(request);
 
 
@@ -239,7 +240,7 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
     qDebug()<<"receive listPeer ";
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QString all = codec->toUnicode(reply->readAll());
-
+    qDebug()<<"Xware::listPeer"<<all;
     QJsonParseError parseerr;
     QVariant result = QJsonDocument::fromJson(all.toUtf8(), &parseerr).toVariant();
 
@@ -248,8 +249,8 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
         QList<PeerList> peers;
         if (obj["rtn"].toInt() == 0) {
             //有下载器
-            QVariantList  peerList = obj["peerList"].toList();
-            foreach(const QVariant& item, peerList) {
+            QVariantList  QvarPeerList = obj["peerList"].toList();
+            foreach(const QVariant& item, QvarPeerList) {
                 QVariantMap peer = item.toMap();
                 PeerList s;
                 s.accesscode=peer["accesscode"].toString();
@@ -266,20 +267,25 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
 
             }
 
+            peerList = peers;
 
+            qDebug()<<"have downloader";
             emit hasDownloader(peers);
         }
         else {
             //没有配置下载器
             emit noDownloader();
+            qDebug()<<"no downloader";
         }
     }
     emit listPeerFinished();
     reply->deleteLater();
 
 }
-void Xware::list(QList<PeerList> &peerList) {
-    qDebug()<<"Xware::list():"<<peerList.at(0).pid;
+void Xware::list(QList<PeerList> peerList) {
+    if(peerList.size()<=0)
+        return;
+
 
     //假设只有一个下载器
     QString args="/list?&type=0&pos=0&number=8&needUrl=1&v=2&ct=0&pid="+
@@ -296,14 +302,15 @@ void Xware::list(QList<PeerList> &peerList) {
     QNetworkRequest request;
     request.setRawHeader("Cookie",cookieString.toLatin1());
     request.setUrl(QUrl(API_PROTOCOLS_URL+args));
-
+    qDebug()<<API_PROTOCOLS_URL+args;
     manager[5]->get(request);
 }
 void Xware::listReplyFinished(QNetworkReply *reply) {
 
+    qDebug()<<"Xware::listReplyFinished()";
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QString all = codec->toUnicode(reply->readAll());
-    qDebug()<<all;
+    qDebug()<<"listReply:"<<all;
     QJsonParseError parseer;
     QVariant result = QJsonDocument::fromJson(all.toUtf8(),&parseer).toVariant();
     if(parseer.error == QJsonParseError::NoError) {
@@ -352,6 +359,33 @@ void Xware::cycleListPeer() {
     QTimer::singleShot(2000, this, SLOT(listPeer()));
 
 
+}
+void Xware::operateTask(QString args) {
+    qDebug()<<"Xware::operateTask():";
+
+    //假设只有一个下载器
+  //  qDebug()<<"peerList大小"<<peerList.size();
+   // if(peerList.size()<=0)
+    //    return;
+    QString CompleArgs=args+"&v=2&ct=0&pid="+peerList.at(0).pid;
+
+    if(manager[6] ==NULL) {
+
+        manager[6]=new QNetworkAccessManager(this);
+        connect(manager[6],SIGNAL(finished(QNetworkReply*)),
+                this,SLOT(operateTaskReplyFinished(QNetworkReply*)));
+    }
+
+
+    QNetworkRequest request;
+    request.setRawHeader("Cookie",cookieString.toLatin1());
+    request.setUrl(QUrl(API_PROTOCOLS_URL+CompleArgs));
+
+    manager[6]->get(request);
+}
+void Xware::operateTaskReplyFinished(QNetworkReply *reply) {
+    qDebug()<<"Xware::operateTaskReplyFinished";
+    emit operateTaskFinish();
 }
 
 void Xware::test()

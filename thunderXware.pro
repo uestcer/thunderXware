@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     terminal.cpp \
     loginui.cpp \
     downloaderui.cpp \
-    tasklistview.cpp
+    tasklistview.cpp \
+    createtaskui.cpp
 
 HEADERS  += mainwindow.h \
     lib/xware_type.h \
@@ -31,12 +32,14 @@ HEADERS  += mainwindow.h \
     terminal.h \
     loginui.h \
     downloaderui.h \
-    tasklistview.h
+    tasklistview.h \
+    createtaskui.h
 
 FORMS    += mainwindow.ui \
     loginui.ui \
     test.ui \
-    downloaderui.ui
+    downloaderui.ui \
+    createtaskui.ui
 
 
 

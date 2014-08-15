@@ -32,14 +32,33 @@ public:
     ~DownLoaderUI();
 
 private:
+    //添加下载的那个窗口模块
+    void addTaskWindows();
     //好看的文件大小，下载速度显示
     QString perfectSize(QVariant value);
     //好看的下载任务状态
     QString perfectState(int state);
     Ui::DownLoaderUI *ui;
     TaskListView *taskListView;
+//对下载进行操作的三个按钮
+    QPushButton *add_button;
+    QPushButton *start_button;
+    QPushButton *pause_button;
+    QPushButton *remove_button;//删除
+signals:
+    void add_signal(QString args);
+    void start_signal(QString args);
+    void pause_signal(QString args);
+    void remove_signal(QString args);
 public slots:
     void updateTaskView(DownloadTaskStatus taskList );
+
+private slots:
+    void addTask() ;
+    void startTask();
+    void pauseTask();
+    void removeTask();
+
 
 };
 

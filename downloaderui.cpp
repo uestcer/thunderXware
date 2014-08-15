@@ -6,21 +6,42 @@ DownLoaderUI::DownLoaderUI(QWidget *parent) :
     ui(new Ui::DownLoaderUI)
 {
     ui->setupUi(this);
+
+   addTaskWindows();
+
+
+}
+void DownLoaderUI::addTaskWindows() {
     taskListView = new TaskListView();
+    add_button = new QPushButton(tr("新建任务"));
+    start_button = new QPushButton(tr("开始"));
+    pause_button = new QPushButton(tr("暂停"));
+    remove_button = new QPushButton(tr("删除"));
+    QHBoxLayout *operateLayout = new QHBoxLayout();
+    operateLayout->addStretch();
+    operateLayout->addWidget(add_button);
+    operateLayout->addWidget(start_button);
+    operateLayout->addWidget(pause_button);
+    operateLayout->addWidget(remove_button);
+
     QVBoxLayout *main_layout = new QVBoxLayout();
     main_layout->addWidget(taskListView);
-
+    main_layout->addLayout(operateLayout);
     main_layout->setSpacing(20);
     main_layout->setContentsMargins(20, 20, 20, 20);
 
     this->setLayout(main_layout);
-
-
+    connect(add_button,&QPushButton::clicked,this,&DownLoaderUI::addTask);
+    connect(start_button,&QPushButton::clicked,this,&DownLoaderUI::startTask);
+    connect(pause_button,&QPushButton::clicked,this,&DownLoaderUI::pauseTask);
+    connect(remove_button,&QPushButton::clicked,this,&DownLoaderUI::removeTask);
 }
 
 DownLoaderUI::~DownLoaderUI()
 {
     delete ui;
+    delete taskListView;
+
 }
 //更新下载任务列表显示
 void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
@@ -48,7 +69,8 @@ void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
 
         grid.append(row);
         locate.push_back(item.id);
-        task[item.id] = item.id+"_"+item.state;
+        task[item.id] = item.id+"_"+QString::number(item.state);
+
 
 
     }
@@ -106,7 +128,7 @@ QString DownLoaderUI::perfectState(int state) {
     case 8:
         return "等待";
     case 9:
-        return "停止";
+        return "暂停";
     case 10:
         return "暂停";
     case 11:
@@ -127,6 +149,31 @@ QString DownLoaderUI::perfectState(int state) {
         return "";
 
     }
+}
+
+void DownLoaderUI::addTask() {
+  //  const static QString args = ""
+}
+
+void DownLoaderUI::startTask() {
+    QString args="/start?tasks=";
+    args +=taskListView->getCheckBoxSelect();
+    emit start_signal(args);
+    qDebug()<<"DownLoaderUI::startTask()"<<args;
+
+}
+
+void DownLoaderUI::pauseTask() {
+    QString args="/pause?tasks=";
+    args +=taskListView->getCheckBoxSelect();
+    emit pause_signal(args);
+    qDebug()<<"DownLoaderUI::pauseTask()"<<args;
+}
+void DownLoaderUI::removeTask() {
+    QString args = "/del?recycleTask=1&deleteFile=true&tasks=";
+    args +=taskListView->getCheckBoxSelect();
+    emit remove_signal(args);
+    qDebug()<<"DownLoaderUI::removeTask"<<args;
 }
 
 void DownLoaderUI::test() {

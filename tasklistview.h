@@ -50,6 +50,9 @@ public:
     void setTask(const QMap<QString,QString> *t) {
          task= *t;
     }
+    QMap<QString,QString>& getTask() {
+        return task;
+    }
 
 signals:
     void updateCount(int count);
@@ -81,7 +84,7 @@ public:
     void updateAllData(const QList<QStringList> *grid_list,
                        const QMap<QString, QString> *task,
                        const QVector<QString> *locate);
-
+    QString getCheckBoxSelect();
 
 signals:
    // void updateCount(int count);
