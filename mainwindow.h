@@ -25,9 +25,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void Login();
-    void addDownloader(QList<PeerList>& newDownloaders);
 
-    void test();
 
     ~MainWindow();
 
@@ -38,11 +36,19 @@ private:
     LoginUI *loginUI;//登录
     DownLoaderUI *downLoaderUI;//下载任务
 
-
+    DownLoaderUI *downLoaderCompleteUI;
+    DownLoaderUI *downLoaderTrashUI;
+    DownLoaderUI *downLoaderFailUI;
     void initConnectSignal();//大量的connect放在这里
+    void refreshTaskButton();
 public slots:
     void coreCycle();
 
+private slots:
+    void on_buttonDownloading_clicked();
+    void on_buttonComplete_clicked();
+    void on_buttonTrash_clicked();
+    void on_buttonFail_clicked();
 };
 
 #endif // MAINWINDOW_H

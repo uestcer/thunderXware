@@ -181,7 +181,7 @@ void DownLoaderUI::pauseTask() {
     qDebug()<<"DownLoaderUI::pauseTask()"<<args;
 }
 void DownLoaderUI::removeTask() {
-    QString args = "/del?recycleTask=1&deleteFile=true&tasks=";
+    QString args = "/del?recycleTask=1&deleteFile=false&tasks=";
     args +=taskListView->getCheckBoxSelect();
     emit remove_signal(args);
     qDebug()<<"DownLoaderUI::removeTask"<<args;

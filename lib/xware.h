@@ -31,7 +31,7 @@ public:
     Xware(QObject *parent=0);
 
     void login(const QString &userName,const QString &rawPassword);
-
+    void list();//轮询当前下载器的任务，这里假设只有一个下载器
    /* QList<PeerList> &getPeerList() { return peerList  ;}
     void setPeerList(const QList<PeerList> &peers) {
         peerList.clear();
@@ -40,6 +40,7 @@ public:
     //args是要传入的参数
     void operateTask(QString args);
     void createTask(QString args,QString url,QString taskName );
+    DownloadTaskStatus downloadTaskStatus;
     void test();
 signals:
     void onCheckPost();
@@ -65,7 +66,7 @@ private slots:
     void listPeer();
     void listPeerReplyFinished(QNetworkReply *reply);
     void cycleListPeer();//启动周期性listPeer();
-    void list();//轮询当前下载器的任务，这里假设只有一个下载器
+
     void listReplyFinished(QNetworkReply *reply);
     void operateTaskReplyFinished(QNetworkReply *reply);
     void createTaskReplyFinished(QNetworkReply *reply);
@@ -102,7 +103,7 @@ private:
     QString cookieString;
     User *user;
     QList<PeerList> peerList;
-    DownloadTaskStatus downloadTaskStatus;
+
 
 
 };

@@ -9,8 +9,8 @@ static const QString API_LOGIN_URL="http://login.xunlei.com/sec2login";
 static const QString API_AFTERLOGIN_URL="http://stat.login.xunlei.com:1800/report?cnt=1&cmdid=sec2login&errorcode=0&responsetime=1&retrynum=0&serverip=&url=&domain=&b_type=113&platform=1&clientversion=";
 static const QString API_HOMEPAGE_URL="http://yuancheng.xunlei.com";
 static const QString API_PROTOCOLS_URL_REMOTE="http://homecloud.yuancheng.xunlei.com";
-//static const QString API_PROTOCOLS_URL="http://homecloud.yuancheng.xunlei.com";
-static const QString API_PROTOCOLS_URL = "http://localhost:1111";
+static const QString API_PROTOCOLS_URL="http://homecloud.yuancheng.xunlei.com";
+//static const QString API_PROTOCOLS_URL = "http://localhost:1111";
 Xware::Xware(QObject *parent): QObject(parent)
 {
     //将manager初始化为空指针
@@ -215,7 +215,7 @@ void Xware::goToHomePageReplyFinished(QNetworkReply *) {
 
 
 void Xware::listPeer() {
-    QString args="/listPeer?type=0&v=2&ct=0";
+    QString args="/listPeer?v=2&ct=0&type=0";
     if(manager[4] ==NULL) {
 
         manager[4]=new QNetworkAccessManager(this);
@@ -281,13 +281,16 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
     reply->deleteLater();
 
 }
+
+QString listType = "0";
 void Xware::list() {
     if(peerList.size()<=0)
         return;
 
 
     //假设只有一个下载器
-    QString args="/list?&type=0&pos=0&number=8&needUrl=1&v=2&ct=0&pid="+
+    QString args="/list?&pos=0&number=8&needUrl=1&v=2&ct=0&type="+listType
+            +"&pid="+
             peerList.at(0).pid;
 
     if(manager[5] ==NULL) {
