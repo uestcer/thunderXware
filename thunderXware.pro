@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     loginui.cpp \
     downloaderui.cpp \
     tasklistview.cpp \
-    createtaskui.cpp
+    createtaskui.cpp \
+    controlbinaryxware.cpp
 
 HEADERS  += mainwindow.h \
     lib/xware_type.h \
@@ -33,14 +34,21 @@ HEADERS  += mainwindow.h \
     loginui.h \
     downloaderui.h \
     tasklistview.h \
-    createtaskui.h
+    createtaskui.h \
+    controlbinaryxware.h
 
 FORMS    += mainwindow.ui \
     loginui.ui \
     test.ui \
     downloaderui.ui \
-    createtaskui.ui
+    createtaskui.ui \
+    controlbinaryxware.ui
 
 
 
-OTHER_FILES +=
+OTHER_FILES += \
+    xware/EmbedThunderManager \
+    xware/ETMDaemon \
+    xware/portal \
+    xware/vod_httpserver \
+    xware/README
