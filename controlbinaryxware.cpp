@@ -14,9 +14,11 @@ ControlBinaryXware::ControlBinaryXware(QWidget *parent) :
 
 ControlBinaryXware::~ControlBinaryXware()
 {
-    delete ui;
+    stopXware();//关闭xware
+
     delete proc_start;
     delete proc_stop;
+    delete ui;
 }
 
 
@@ -32,9 +34,14 @@ void ControlBinaryXware::startXware(){
     proc_start->start("xware/portal");
 }
 void ControlBinaryXware::stopXware() {
-
+    QStringList arguments;
+    arguments << "-s";
+    proc_stop->start("xware/portal",arguments);
+    proc_stop->waitForFinished();
 }
-
+QString activeCode;
+QString bindName;
+bool isBinded=false;
 void ControlBinaryXware::getXwareStartInfo()
 {
 
@@ -42,26 +49,28 @@ void ControlBinaryXware::getXwareStartInfo()
 
     QString bindPrefix = "THIS DEVICE HAS BOUND TO USER: ";
     QString activePrefix = "THE ACTIVE CODE IS: ";
-    QString activeCode;
-    QString bindName;
+    QString activeCode_tmp;
+    QString bindName_tmp;
     int ai=str.indexOf(activePrefix);
     int bi = str.indexOf(bindPrefix);
     if(ai != -1 ) {
-        ai += activeCode.length();
+        ai += activePrefix.length();
         while(str[ai]!='\n') {
-            activeCode+=str[ai++];
+            activeCode_tmp+=str[ai++];
         }
-        qDebug()<<activeCode;
-        emit xwareStartInfoSignal(activeCode,false);
+        activeCode=activeCode_tmp;
+        isBinded = false;
+        emit xwareStartInfoSignal(activeCode_tmp,false);
 
     }else if(bi != -1) {
         bi +=bindPrefix.length();
         while(str[bi] != '\n') {
-            bindName +=str[bi++];
+            bindName_tmp +=str[bi++];
         }
-        bindName.remove(bindName.length()-1);
-        qDebug()<<bindName;
-        emit xwareStartInfoSignal(bindName,true);
+        bindName_tmp.remove(bindName_tmp.length()-1);
+        bindName = bindName_tmp;
+        isBinded = true;
+        emit xwareStartInfoSignal(bindName_tmp,true);
     }
 }
 

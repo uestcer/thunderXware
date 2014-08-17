@@ -9,6 +9,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     xware = new Xware(this);
     loginUI = new LoginUI(this);
+    xwareControl = new ControlBinaryXware;
+
+    xwareStartStatus = new QLabel("xware未启动");
+    xwareBindStatus = new QLabel("xware未绑定");
+    frontStatus = new QLabel("前端未连接");
+    ui->statusBar->addPermanentWidget(xwareStartStatus);
+    ui->statusBar->addPermanentWidget(xwareBindStatus);
+    ui->statusBar->addPermanentWidget(frontStatus);
 
 
     downLoaderUI= new DownLoaderUI(this);
@@ -23,7 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //放在最后初始化
     initConnectSignal();
+    init();
 }
+
 void MainWindow::initConnectSignal() {
     //接收来自LoginUI的登录click
     connect(loginUI,&LoginUI::login,xware,&Xware::login);
@@ -71,7 +81,12 @@ void MainWindow::initConnectSignal() {
     connect(downLoaderFailUI,&DownLoaderUI::pause_signal,xware,&Xware::operateTask);
     connect(downLoaderFailUI,&DownLoaderUI::remove_signal,xware,&Xware::operateTask);
 
+    connect(xwareControl,&ControlBinaryXware::xwareStartInfoSignal,
+            this,&MainWindow::checkXwareInfo);
 
+}
+void MainWindow::init() {
+     xwareControl->startXware();
 }
 
 void MainWindow::refreshTaskButton()
@@ -91,6 +106,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete xware;
     delete loginUI;
+    delete xwareControl;
 }
 void MainWindow::Login()
 {
@@ -144,3 +160,14 @@ void MainWindow::on_buttonFail_clicked()
     xware->list();
     ui->stackedWidget->setCurrentIndex(3);
 }
+
+void MainWindow::checkXwareInfo(QString info, bool isBinded)
+{
+    xwareStartStatus->setText("xware已启动");
+    if(isBinded) {
+        xwareBindStatus->setText(info);
+    }else {
+        xwareBindStatus->setText("xware未绑定");
+    }
+}
+

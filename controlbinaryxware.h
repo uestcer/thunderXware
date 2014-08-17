@@ -18,7 +18,7 @@ public:
     void stopXware();
     void startXware();
 signals:
-    QString xwareStartInfoSignal(QString info,bool hasBind);
+    QString xwareStartInfoSignal(QString info,bool isBinded);
 public slots:
 
 private slots:

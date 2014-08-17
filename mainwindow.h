@@ -8,12 +8,13 @@
 #include <QPushButton>
 #include <QWidget>
 #include <QStackedWidget>
+#include <QLabel>
 #include "lib/xware.h"
 #include "loginui.h"
 #include "lib/xware_type.h"
 #include "downloaderui.h"
 #include "createtaskui.h"
-
+#include "controlbinaryxware.h"
 namespace Ui {
 class MainWindow;
 }
@@ -39,8 +40,13 @@ private:
     DownLoaderUI *downLoaderCompleteUI;
     DownLoaderUI *downLoaderTrashUI;
     DownLoaderUI *downLoaderFailUI;
+    QLabel *xwareStartStatus;//xware是否启动
+    QLabel *xwareBindStatus;//xware是否已经绑定
+    QLabel *frontStatus;//xware前端是否已经正常
+    ControlBinaryXware *xwareControl;
     void initConnectSignal();//大量的connect放在这里
     void refreshTaskButton();
+    void init();//初始化相关工作
 public slots:
     void coreCycle();
 
@@ -49,6 +55,7 @@ private slots:
     void on_buttonComplete_clicked();
     void on_buttonTrash_clicked();
     void on_buttonFail_clicked();
+    void checkXwareInfo(QString info, bool isBinded);
 };
 
 #endif // MAINWINDOW_H
