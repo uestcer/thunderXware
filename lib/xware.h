@@ -41,6 +41,7 @@ public:
     void operateTask(QString args);
     void createTask(QString args,QString url,QString taskName );
     DownloadTaskStatus downloadTaskStatus;
+    QList<PeerList> peerList;
     void test();
 signals:
     void onCheckPost();
@@ -102,7 +103,7 @@ private:
     QList<QNetworkCookie>  *cookieList;
     QString cookieString;
     User *user;
-    QList<PeerList> peerList;
+
 
 
 

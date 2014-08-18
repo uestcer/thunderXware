@@ -9,6 +9,7 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QLabel>
+#include <QMap>
 #include "lib/xware.h"
 #include "loginui.h"
 #include "lib/xware_type.h"
@@ -47,6 +48,10 @@ private:
     void initConnectSignal();//大量的connect放在这里
     void refreshTaskButton();
     void init();//初始化相关工作
+    //<pid,index>
+    QMap<QString,int> pidIndexMap;
+    //<index,pid>
+    QMap<int,QString> indexPidMap;
 public slots:
     void coreCycle();
 
@@ -56,6 +61,8 @@ private slots:
     void on_buttonTrash_clicked();
     void on_buttonFail_clicked();
     void checkXwareInfo(QString info, bool isBinded);
+    void selectDownloader(int index);
+    void updateDownloader();
 };
 
 #endif // MAINWINDOW_H

@@ -212,7 +212,14 @@ void Xware::goToHomePageReplyFinished(QNetworkReply *) {
 
 }
 
+void Xware::cycleListPeer() {
 
+
+
+    QTimer::singleShot(2000, this, SLOT(listPeer()));
+
+
+}
 
 void Xware::listPeer() {
     QString args="/listPeer?v=2&ct=0&type=0";
@@ -270,6 +277,7 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
 
 
             emit hasDownloader();
+
         }
         else {
             //没有配置下载器
@@ -282,16 +290,21 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
 
 }
 
+
 QString listType = "0";
+QString DownloaderPID;
 void Xware::list() {
     if(peerList.size()<=0)
         return;
 
+    if(DownloaderPID=="") {
+        DownloaderPID = peerList.at(0).pid;
+    }
 
     //假设只有一个下载器
     QString args="/list?&pos=0&number=8&needUrl=1&v=2&ct=0&type="+listType
-            +"&pid="+
-            peerList.at(0).pid;
+            +"&pid="+DownloaderPID;
+           // peerList.at(0).pid;
 
     if(manager[5] ==NULL) {
 
@@ -354,14 +367,7 @@ void Xware::listReplyFinished(QNetworkReply *reply) {
     reply->deleteLater();
 }
 
-void Xware::cycleListPeer() {
 
-
-
-    QTimer::singleShot(2000, this, SLOT(listPeer()));
-
-
-}
 void Xware::operateTask(QString args) {
     //qDebug()<<"Xware::operateTask():";
 

@@ -84,6 +84,11 @@ void MainWindow::initConnectSignal() {
     connect(xwareControl,&ControlBinaryXware::xwareStartInfoSignal,
             this,&MainWindow::checkXwareInfo);
 
+    //下载器选择
+    connect(ui->selectDownloader, SIGNAL(activated(int)),
+                this,SLOT(selectDownloader(int)));
+    connect(xware,&Xware::hasDownloader,this,&MainWindow::updateDownloader);
+
 }
 void MainWindow::init() {
      xwareControl->startXware();
@@ -159,6 +164,29 @@ void MainWindow::on_buttonFail_clicked()
     listType = "3";
     xware->list();
     ui->stackedWidget->setCurrentIndex(3);
+}
+extern QString DownloaderPID;
+void MainWindow::updateDownloader() {
+    //qDebug()<<"updateDownLoader";
+    QList<PeerList> peers = xware->peerList;
+    int size = peers.length();
+    ui->selectDownloader->clear();
+    for(int i= 0;i<size;i++) {
+        ui->selectDownloader->addItem(peers.at(i).name);
+        pidIndexMap[peers.at(i).pid]=i;
+        indexPidMap[i]=peers.at(i).pid;
+
+    }
+
+    ui->selectDownloader->setCurrentIndex(pidIndexMap[DownloaderPID]);
+
+}
+
+void MainWindow::selectDownloader(int index) {
+    qDebug()<<"selectDownloader";
+    DownloaderPID = indexPidMap[index];
+    qDebug()<<DownloaderPID<<"吴志展";
+
 }
 
 void MainWindow::checkXwareInfo(QString info, bool isBinded)
