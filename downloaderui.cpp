@@ -158,16 +158,16 @@ QString DownLoaderUI::perfectState(int state) {
     }
 }
 
-
+extern QString downloaderPID;
 void DownLoaderUI::addTask(QString url, QString taskName)
 {
-    QString args="/createTask?";
+    QString args="/createTask?pid="+downloaderPID;
     emit add_signal(args,url,taskName);
     qDebug()<<"create New Task";
 
 }
 void DownLoaderUI::startTask() {
-    QString args="/start?tasks=";
+    QString args="/start?pid="+downloaderPID+"&tasks=";
     args +=taskListView->getCheckBoxSelect();
     emit start_signal(args);
     qDebug()<<"DownLoaderUI::startTask()"<<args;
@@ -175,13 +175,14 @@ void DownLoaderUI::startTask() {
 }
 
 void DownLoaderUI::pauseTask() {
-    QString args="/pause?tasks=";
+    QString args="/pause?pid="+downloaderPID+"&tasks=";
     args +=taskListView->getCheckBoxSelect();
     emit pause_signal(args);
     qDebug()<<"DownLoaderUI::pauseTask()"<<args;
 }
 void DownLoaderUI::removeTask() {
-    QString args = "/del?recycleTask=1&deleteFile=false&tasks=";
+    QString args = "/del?recycleTask=1&deleteFile=true&pid="
+            +downloaderPID+"&tasks=";
     args +=taskListView->getCheckBoxSelect();
     emit remove_signal(args);
     qDebug()<<"DownLoaderUI::removeTask"<<args;

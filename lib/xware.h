@@ -32,7 +32,7 @@ public:
 
     void login(const QString &userName,const QString &rawPassword);
     void list();//轮询当前下载器的任务，这里假设只有一个下载器
-   /* QList<PeerList> &getPeerList() { return peerList  ;}
+    /* QList<PeerList> &getPeerList() { return peerList  ;}
     void setPeerList(const QList<PeerList> &peers) {
         peerList.clear();
         peerList.append(peers);
@@ -42,6 +42,7 @@ public:
     void createTask(QString args,QString url,QString taskName );
     DownloadTaskStatus downloadTaskStatus;
     QList<PeerList> peerList;
+
     void test();
 signals:
     void onCheckPost();
@@ -56,6 +57,8 @@ signals:
     void listFinished(DownloadTaskStatus );//list解析完成
     void operateTaskFinish( );//操作完成
     void createTaskFailSignal(const QString &info);
+public slots:
+    void listPeer();
 private slots:
     //登录前check接收完成
     void checkReplyFinished(QNetworkReply *);
@@ -64,7 +67,7 @@ private slots:
     //登录后状态检验完成（还没发现有用）
     void statusReplyFinished(QNetworkReply*);
     void goToHomePageReplyFinished(QNetworkReply*);
-    void listPeer();
+
     void listPeerReplyFinished(QNetworkReply *reply);
     void cycleListPeer();//启动周期性listPeer();
 

@@ -16,6 +16,7 @@
 #include "downloaderui.h"
 #include "createtaskui.h"
 #include "controlbinaryxware.h"
+#include "bind.h"
 namespace Ui {
 class MainWindow;
 }
@@ -41,10 +42,12 @@ private:
     DownLoaderUI *downLoaderCompleteUI;
     DownLoaderUI *downLoaderTrashUI;
     DownLoaderUI *downLoaderFailUI;
+
     QLabel *xwareStartStatus;//xware是否启动
     QLabel *xwareBindStatus;//xware是否已经绑定
-    QLabel *frontStatus;//xware前端是否已经正常
+
     ControlBinaryXware *xwareControl;
+    Bind bindUI;
     void initConnectSignal();//大量的connect放在这里
     void refreshTaskButton();
     void init();//初始化相关工作
@@ -63,6 +66,8 @@ private slots:
     void checkXwareInfo(QString info, bool isBinded);
     void selectDownloader(int index);
     void updateDownloader();
+    void bindDownloader(QString activeCode);
+    void on_pushButton_clicked();
 };
 
 #endif // MAINWINDOW_H

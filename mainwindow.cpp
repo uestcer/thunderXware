@@ -13,10 +13,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     xwareStartStatus = new QLabel("xware未启动");
     xwareBindStatus = new QLabel("xware未绑定");
-    frontStatus = new QLabel("前端未连接");
+
     ui->statusBar->addPermanentWidget(xwareStartStatus);
     ui->statusBar->addPermanentWidget(xwareBindStatus);
-    ui->statusBar->addPermanentWidget(frontStatus);
+
 
 
     downLoaderUI= new DownLoaderUI(this);
@@ -83,6 +83,9 @@ void MainWindow::initConnectSignal() {
 
     connect(xwareControl,&ControlBinaryXware::xwareStartInfoSignal,
             this,&MainWindow::checkXwareInfo);
+
+    //添加下载器
+    connect(&bindUI,&Bind::bindSignal,this,&MainWindow::bindDownloader);
 
     //下载器选择
     connect(ui->selectDownloader, SIGNAL(activated(int)),
@@ -165,7 +168,7 @@ void MainWindow::on_buttonFail_clicked()
     xware->list();
     ui->stackedWidget->setCurrentIndex(3);
 }
-extern QString DownloaderPID;
+extern QString downloaderPID;
 void MainWindow::updateDownloader() {
     //qDebug()<<"updateDownLoader";
     QList<PeerList> peers = xware->peerList;
@@ -178,24 +181,39 @@ void MainWindow::updateDownloader() {
 
     }
 
-    ui->selectDownloader->setCurrentIndex(pidIndexMap[DownloaderPID]);
-
+    ui->selectDownloader->setCurrentIndex(pidIndexMap[downloaderPID]);
+    if(xware->peerList.at(pidIndexMap[downloaderPID]).online) {
+       ui->downloaderStatus->setText("在线");
+    }else {
+       ui->downloaderStatus->setText("离线");
+    }
 }
 
 void MainWindow::selectDownloader(int index) {
 
-    DownloaderPID = indexPidMap[index];
-
+    downloaderPID = indexPidMap[index];
+    xware->listPeer();
 
 }
 
 void MainWindow::checkXwareInfo(QString info, bool isBinded)
 {
-    xwareStartStatus->setText("xware已启动");
+    xwareStartStatus->setText("本机xware已启动");
     if(isBinded) {
         xwareBindStatus->setText(info);
     }else {
-        xwareBindStatus->setText("xware未绑定");
+        xwareBindStatus->setText(info);
     }
 }
 
+void MainWindow::bindDownloader(QString activeCode) {
+    qDebug()<<"bindDownloader";
+    QString args = "/bind?boxName=&key="+activeCode;
+    xware->operateTask(args);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    bindUI.setActiveCode("");
+    bindUI.show();
+}

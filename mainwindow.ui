@@ -94,8 +94,8 @@
    <widget class="QComboBox" name="selectDownloader">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>10</y>
+      <x>260</x>
+      <y>20</y>
       <width>291</width>
       <height>30</height>
      </rect>
@@ -104,14 +104,40 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>10</y>
+      <x>180</x>
+      <y>30</y>
       <width>67</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>下载器：</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="downloaderStatus">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>20</y>
+      <width>67</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>9</y>
+      <width>102</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>添加下载器</string>
     </property>
    </widget>
   </widget>

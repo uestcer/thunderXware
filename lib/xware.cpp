@@ -292,18 +292,18 @@ void Xware::listPeerReplyFinished(QNetworkReply *reply)
 
 
 QString listType = "0";
-QString DownloaderPID;
+QString downloaderPID;
 void Xware::list() {
     if(peerList.size()<=0)
         return;
 
-    if(DownloaderPID=="") {
-        DownloaderPID = peerList.at(0).pid;
+    if(downloaderPID=="") {
+        downloaderPID = peerList.at(0).pid;
     }
 
     //假设只有一个下载器
     QString args="/list?&pos=0&number=8&needUrl=1&v=2&ct=0&type="+listType
-            +"&pid="+DownloaderPID;
+            +"&pid="+downloaderPID;
            // peerList.at(0).pid;
 
     if(manager[5] ==NULL) {
@@ -369,14 +369,10 @@ void Xware::listReplyFinished(QNetworkReply *reply) {
 
 
 void Xware::operateTask(QString args) {
-    //qDebug()<<"Xware::operateTask():";
 
-    //假设只有一个下载器
-    //  qDebug()<<"peerList大小"<<peerList.size();
-    if(peerList.size()<=0)
-        return;
-    QString CompleArgs=args+"&v=2&ct=0&pid="+peerList.at(0).pid;
 
+    QString CompleArgs=args+"&v=2&ct=0";
+    qDebug()<<"Xware::operateTask()"<<CompleArgs;
     if(manager[6] ==NULL) {
 
         manager[6]=new QNetworkAccessManager(this);

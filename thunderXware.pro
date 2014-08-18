@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     downloaderui.cpp \
     tasklistview.cpp \
     createtaskui.cpp \
-    controlbinaryxware.cpp
+    controlbinaryxware.cpp \
+    bind.cpp
 
 HEADERS  += mainwindow.h \
     lib/xware_type.h \
@@ -35,14 +36,16 @@ HEADERS  += mainwindow.h \
     downloaderui.h \
     tasklistview.h \
     createtaskui.h \
-    controlbinaryxware.h
+    controlbinaryxware.h \
+    bind.h
 
 FORMS    += mainwindow.ui \
     loginui.ui \
     test.ui \
     downloaderui.ui \
     createtaskui.ui \
-    controlbinaryxware.ui
+    controlbinaryxware.ui \
+    bind.ui
 
 
 
