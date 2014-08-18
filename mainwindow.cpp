@@ -183,9 +183,9 @@ void MainWindow::updateDownloader() {
 }
 
 void MainWindow::selectDownloader(int index) {
-    qDebug()<<"selectDownloader";
+
     DownloaderPID = indexPidMap[index];
-    qDebug()<<DownloaderPID<<"吴志展";
+
 
 }
 
