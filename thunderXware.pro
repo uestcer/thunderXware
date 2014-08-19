@@ -55,3 +55,6 @@ OTHER_FILES += \
     xware/portal \
     xware/vod_httpserver \
     xware/README
+
+RESOURCES += \
+    res.qrc

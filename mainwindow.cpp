@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     xware = new Xware(this);
-    loginUI = new LoginUI(this);
+    loginUI = new LoginUI();
     xwareControl = new ControlBinaryXware;
 
     xwareStartStatus = new QLabel("xware未启动");

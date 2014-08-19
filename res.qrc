@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>res/loginUI/afternoon.jpg</file>
+        <file>res/loginUI/button_login_down.png</file>
+        <file>res/loginUI/button_login_hover.png</file>
+        <file>res/loginUI/button_login_normal.png</file>
+        <file>res/loginUI/close.png</file>
+        <file>res/loginUI/close_hover.png</file>
+        <file>res/loginUI/close_press.png</file>
+    </qresource>
+</RCC>

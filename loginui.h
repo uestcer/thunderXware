@@ -2,7 +2,17 @@
 #define LOGINUI_H
 
 #include <QDialog>
-
+#include <QPoint>
+#include <QMouseEvent>
+#include <QToolButton>
+#include <QPixmap>
+#include <QLabel>
+#include <QBitmap>
+#include <QPainter>
+#include <QPalette>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QWidget>
 namespace Ui {
 class LoginUI;
 }
@@ -24,6 +34,23 @@ private slots:
 
 private:
     Ui::LoginUI *ui;
+    QPoint move_point;//移动距离
+    bool mouse_press;//鼠标按下
+    //鼠标按下事件
+    void mousePressEvent(QMouseEvent *event);
+    //鼠标释放事件
+    void mouseReleaseEvent(QMouseEvent *);
+    //鼠标移动事件
+    void mouseMoveEvent(QMouseEvent *event);
+
+
+
+
+    QToolButton *closeButton;
+
+    QLabel *background;
+
+
 };
 
 #endif // LOGINUI_H
