@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    setMinimumWidth(1000);
+    setMinimumHeight(600);
     xware = new Xware(this);
     loginUI = new LoginUI();
     xwareControl = new ControlBinaryXware;
@@ -28,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stackedWidget->addWidget(downLoaderCompleteUI);
     ui->stackedWidget->addWidget(downLoaderTrashUI);
     ui->stackedWidget->addWidget(downLoaderFailUI);
+
 
     //放在最后初始化
     initConnectSignal();
@@ -89,20 +93,20 @@ void MainWindow::initConnectSignal() {
 
     //下载器选择
     connect(ui->selectDownloader, SIGNAL(activated(int)),
-                this,SLOT(selectDownloader(int)));
+            this,SLOT(selectDownloader(int)));
     connect(xware,&Xware::hasDownloader,this,&MainWindow::updateDownloader);
 
 }
 void MainWindow::init() {
-     xwareControl->startXware();
+    xwareControl->startXware();
 }
 
 void MainWindow::refreshTaskButton()
 {
     ui->buttonDownloading->setText("正在下载("
-                                       +QString::number(xware->downloadTaskStatus.dlNum)+")");
+                                   +QString::number(xware->downloadTaskStatus.dlNum)+")");
     ui->buttonComplete->setText("已完成("+
-                                   QString::number(xware->downloadTaskStatus.completeNum)+")");
+                                QString::number(xware->downloadTaskStatus.completeNum)+")");
     ui->buttonTrash->setText("垃圾箱("+
                              QString::number(xware->downloadTaskStatus.recycleNum)+")");
     ui->buttonFail->setText("下载失败("+
@@ -183,9 +187,9 @@ void MainWindow::updateDownloader() {
 
     ui->selectDownloader->setCurrentIndex(pidIndexMap[downloaderPID]);
     if(xware->peerList.at(pidIndexMap[downloaderPID]).online) {
-       ui->downloaderStatus->setText("在线");
+        ui->downloaderStatus->setText("在线");
     }else {
-       ui->downloaderStatus->setText("离线");
+        ui->downloaderStatus->setText("离线");
     }
 }
 
@@ -217,3 +221,4 @@ void MainWindow::on_pushButton_clicked()
     bindUI.setActiveCode("");
     bindUI.show();
 }
+

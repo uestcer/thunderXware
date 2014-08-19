@@ -55,6 +55,8 @@ private:
     QMap<QString,int> pidIndexMap;
     //<index,pid>
     QMap<int,QString> indexPidMap;
+
+
 public slots:
     void coreCycle();
 

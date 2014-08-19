@@ -7,5 +7,9 @@
         <file>res/loginUI/close.png</file>
         <file>res/loginUI/close_hover.png</file>
         <file>res/loginUI/close_press.png</file>
+        <file>res/downloaderUI/thumbbtn_newtask.ico</file>
+        <file>res/downloaderUI/thumbbtn_pausealltask.ico</file>
+        <file>res/downloaderUI/thumbbtn_startalltask.ico</file>
+        <file>res/mainWindow/main_background.jpg</file>
     </qresource>
 </RCC>
