@@ -1,4 +1,15 @@
 QWidget#topWidget
 {
-    background-image: url(":/icons/res/mainWindow/top.png");
+
+    background-color: #4277B8 ;
+}
+
+QWidget#leftWidget
+{
+    background-color:#DFE8F1 ;
+}
+
+
+QTableView#taskListVeiw{
+    background-color:#EFF3F7;
 }

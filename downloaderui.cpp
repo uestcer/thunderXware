@@ -9,7 +9,7 @@ DownLoaderUI::DownLoaderUI(QWidget *parent) :
     createTaskUI = new CreateTaskUI();
 
     addTaskWindows();
-
+    settingUI();
 
 }
 DownLoaderUI::~DownLoaderUI()
@@ -19,25 +19,33 @@ DownLoaderUI::~DownLoaderUI()
     delete createTaskUI;
 
 }
+void DownLoaderUI::settingUI() {
+    taskListView->setObjectName("taskListVeiw");
+    add_button->setObjectName("addButton");
+}
+
 void DownLoaderUI::addTaskWindows() {
 
-    taskListView = new TaskListView();
+    taskListView = new TaskListView(this);
     add_button = new QPushButton(tr("新建任务"));
     start_button = new QPushButton(tr("开始"));
     pause_button = new QPushButton(tr("暂停"));
     remove_button = new QPushButton(tr("删除"));
     QHBoxLayout *operateLayout = new QHBoxLayout();
-    operateLayout->addStretch();
+
     operateLayout->addWidget(add_button);
     operateLayout->addWidget(start_button);
     operateLayout->addWidget(pause_button);
     operateLayout->addWidget(remove_button);
-
+    operateLayout->addStretch();
+    operateLayout->setSpacing(0);
     QVBoxLayout *main_layout = new QVBoxLayout();
-    main_layout->addWidget(taskListView);
+
     main_layout->addLayout(operateLayout);
-    main_layout->setSpacing(2);
-    main_layout->setContentsMargins(20, 20, 20, 20);
+    main_layout->addWidget(taskListView);
+    main_layout->setSpacing(0);
+
+    main_layout->setContentsMargins(0,0, 0,0);
 
     this->setLayout(main_layout);
     //添加新下载任务
@@ -66,7 +74,7 @@ void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
         int time=item.remainTime/3600;
 
 
-        row<<item.name   //名称
+        row<<""<<item.name   //名称
            <<perfectSize(item.size) //大小
            <<QString::number((double)item.progress/100) //进度
            <<QString::number(time)//剩余时间

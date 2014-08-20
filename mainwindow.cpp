@@ -42,6 +42,7 @@ void MainWindow::settingUI() {
 
     //this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     ui->topWidget->setObjectName("topWidget");
+    ui->leftWidget->setObjectName("leftWidget");
 }
 
 void MainWindow::initConnectSignal() {
