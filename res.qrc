@@ -11,6 +11,7 @@
         <file>res/downloaderUI/thumbbtn_pausealltask.ico</file>
         <file>res/downloaderUI/thumbbtn_startalltask.ico</file>
         <file>res/mainWindow/top.png</file>
+        <file>res/mainWindow/btn_select.png</file>
     </qresource>
     <qresource prefix="/qss">
         <file>qss/stylesheet.qss</file>

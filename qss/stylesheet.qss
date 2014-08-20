@@ -13,3 +13,22 @@ QWidget#leftWidget
 QTableView#taskListVeiw{
     background-color:#EFF3F7;
 }
+
+
+QPushButton#buttonDownloading,
+QPushButton#buttonComplete,
+QPushButton#buttonTrash,
+QPushButton#buttonFail
+{
+    color: #000000;
+    background-color: #F1F3F5;
+    border:none;
+    font-family: "Verdana";
+    font-size: 15px;
+    text-align: left;
+    padding-left: 15px;
+
+    
+}
+
+
