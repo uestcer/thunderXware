@@ -56,7 +56,7 @@ private:
     //<index,pid>
     QMap<int,QString> indexPidMap;
 
-
+    void settingUI() ;
 public slots:
     void coreCycle();
 

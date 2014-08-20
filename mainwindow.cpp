@@ -36,6 +36,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //放在最后初始化
     initConnectSignal();
     init();
+    settingUI();
+}
+void MainWindow::settingUI() {
+
+
 }
 
 void MainWindow::initConnectSignal() {

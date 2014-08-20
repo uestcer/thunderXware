@@ -5,7 +5,7 @@ DownLoaderUI::DownLoaderUI(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DownLoaderUI)
 {
-    ui->setupUi(this);
+   // ui->setupUi(this);
     createTaskUI = new CreateTaskUI();
 
     addTaskWindows();
@@ -20,6 +20,7 @@ DownLoaderUI::~DownLoaderUI()
 
 }
 void DownLoaderUI::addTaskWindows() {
+
     taskListView = new TaskListView();
     add_button = new QPushButton(tr("新建任务"));
     start_button = new QPushButton(tr("开始"));
@@ -35,7 +36,7 @@ void DownLoaderUI::addTaskWindows() {
     QVBoxLayout *main_layout = new QVBoxLayout();
     main_layout->addWidget(taskListView);
     main_layout->addLayout(operateLayout);
-    main_layout->setSpacing(20);
+    main_layout->setSpacing(2);
     main_layout->setContentsMargins(20, 20, 20, 20);
 
     this->setLayout(main_layout);
