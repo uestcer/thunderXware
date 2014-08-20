@@ -13,7 +13,7 @@ void TaskListDelegate::paint(QPainter *painter,
                              const QStyleOptionViewItem &option,
                              const QModelIndex &index) const
 {
-    if(index.column() == 2)
+    if(index.column() == 3)
     {
         //进度条
         double progress = index.model ()->data(index, Qt::DisplayRole).toDouble();
@@ -61,20 +61,21 @@ void TaskListModel::setVerticalHeaderList(QStringList verticalHeaderList)
 
 int TaskListModel::rowCount(const QModelIndex &parent) const
 {
-    {
-        if(vertical_header_list.size() > 0)
-            return vertical_header_list.size();
+    Q_UNUSED(parent);
+    if(vertical_header_list.size() > 0)
+        return vertical_header_list.size();
 
-        if(NULL == arr_row_list)
-            return 0;
-        else
-            return arr_row_list->size();
+    if(NULL == arr_row_list)
+        return 0;
+    else
+        return arr_row_list->size();
 
-    }
+
 }
 
 int TaskListModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     if(horizontal_header_list.size() > 0)
         return horizontal_header_list.size();
 
@@ -112,7 +113,7 @@ QVariant TaskListModel::data(const QModelIndex &index, int role) const
 
     } else if(role == Qt::CheckStateRole){
         //第7列显示check_box
-        if(index.column() == 6) {
+        if(index.column() == 0) {
             //task[index.row()]得到的是下载任务的id号
             if(check_state_map.contains(locate[index.row()]))
                 return check_state_map[locate[index.row()]] == Qt::Checked ? Qt::Checked : Qt::Unchecked;
@@ -155,29 +156,29 @@ Qt::ItemFlags TaskListModel::flags(const QModelIndex &index) const
         return Qt::NoItemFlags;
 
 
-    if(index.column()==6)
+    if(index.column()==0)
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
 
- // Qt::ItemFlags flag = QAbstractItemModel::flags(index);
- //   return flag;
+    // Qt::ItemFlags flag = QAbstractItemModel::flags(index);
+    //   return flag;
 
 }
 
 bool TaskListModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
-        if(!index.isValid())
-                return false;
+    if(!index.isValid())
+        return false;
 
-        if (role == Qt::CheckStateRole && index.column() == 6)
-        {
-                check_state_map[locate[index.row()]] = (value == Qt::Checked ?
+    if (role == Qt::CheckStateRole && index.column() == 0)
+    {
+        check_state_map[locate[index.row()]] = (value == Qt::Checked ?
                                                     Qt::Checked : Qt::Unchecked);
-                qDebug()<<"checkbox";
-        }
+        qDebug()<<"checkbox";
+    }
 
-        return true;
+    return true;
 }
 void TaskListModel::setModalDatas(QList<QStringList> *rowList)
 {
@@ -197,15 +198,13 @@ TaskListView::TaskListView(QWidget *parent)
     :QTableView(parent)
 {
     this->setAlternatingRowColors(true);
-    this->setStyleSheet(( "QTableView{background-color: rgb(250, 250, 115);"
-                          "alternate-background-color: rgb(141, 163, 215);}"));
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->horizontalHeader()->setStretchLastSection(true);
+
     this->horizontalHeader()->setHighlightSections(false);
     this->verticalHeader()->setVisible(false);
-    // this->setShowGrid(false);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    // this->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
 
 
     model = new TaskListModel();
@@ -215,11 +214,6 @@ TaskListView::TaskListView(QWidget *parent)
 
     taskListDelegate = new TaskListDelegate();
     this->setItemDelegate(taskListDelegate);
-    // this->initHeader();
-
-
-
-    // connect(model,&TaskListModel::updateCount,this,&TaskListView::updateCount);
     this->initHeader();
 
 
@@ -294,7 +288,7 @@ void TaskListView::changeValue()
 void TaskListView::initHeader()
 {
     QStringList header;
-    header<<tr("名称")<<tr("大小")<<tr("进度")<<tr("剩余时间")<<tr("速度")<<tr("状态")<<tr("选择");
+    header<<tr("选择")<<tr("名称")<<tr("大小")<<tr("进度")<<tr("剩余时间")<<tr("速度")<<tr("状态");
     model->setHorizontalHeaderList(header);
 
 }

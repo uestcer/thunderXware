@@ -389,6 +389,7 @@ void Xware::operateTask(QString args) {
 }
 void Xware::operateTaskReplyFinished(QNetworkReply *reply) {
 
+    Q_UNUSED(reply);
     emit operateTaskFinish();
     //手工调用更新列表
     list();

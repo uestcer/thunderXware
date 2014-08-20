@@ -7,6 +7,11 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QFile qss(":/qss/qss/stylesheet.qss");
+    qss.open(QFile::ReadOnly);
+    qApp->setStyleSheet(qss.readAll());
+    qss.close();
     MainWindow w;
 
     w.Login();

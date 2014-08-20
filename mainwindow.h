@@ -10,6 +10,9 @@
 #include <QStackedWidget>
 #include <QLabel>
 #include <QMap>
+#include <QFile>
+#include <QTextStream>
+
 #include "lib/xware.h"
 #include "loginui.h"
 #include "lib/xware_type.h"
@@ -56,7 +59,7 @@ private:
     //<index,pid>
     QMap<int,QString> indexPidMap;
 
-
+    void settingUI() ;
 public slots:
     void coreCycle();
 

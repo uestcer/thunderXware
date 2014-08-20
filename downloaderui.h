@@ -53,6 +53,7 @@ private:
     QDialog infoDialog ;
     QLabel infolabel;
     QHBoxLayout infoLayout;
+    void settingUI();
 signals:
     void add_signal(QString args,QString url,QString taskName);
     void start_signal(QString args);

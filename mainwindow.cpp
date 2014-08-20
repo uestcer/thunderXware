@@ -36,6 +36,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //放在最后初始化
     initConnectSignal();
     init();
+    settingUI();
+}
+void MainWindow::settingUI() {
+
+    //this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    ui->topWidget->setObjectName("topWidget");
+    ui->leftWidget->setObjectName("leftWidget");
 }
 
 void MainWindow::initConnectSignal() {
