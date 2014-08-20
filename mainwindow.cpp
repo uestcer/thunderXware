@@ -8,8 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    setMinimumWidth(1000);
-    setMinimumHeight(600);
+
     xware = new Xware(this);
     loginUI = new LoginUI();
     xwareControl = new ControlBinaryXware;
@@ -42,6 +41,7 @@ void MainWindow::settingUI() {
 
 
     ui->topWidget->setObjectName("topWidget");
+    ui->logoWidget->setObjectName("logoWidget");
     ui->leftWidget->setObjectName("leftWidget");
     ui->buttonDownloading->setObjectName("buttonDownloading");
     ui->buttonComplete->setObjectName("buttonComplete");

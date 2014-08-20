@@ -8,8 +8,10 @@ DownLoaderUI::DownLoaderUI(QWidget *parent) :
    // ui->setupUi(this);
     createTaskUI = new CreateTaskUI();
 
+
     addTaskWindows();
     settingUI();
+
 
 }
 DownLoaderUI::~DownLoaderUI()
@@ -21,16 +23,26 @@ DownLoaderUI::~DownLoaderUI()
 }
 void DownLoaderUI::settingUI() {
     taskListView->setObjectName("taskListVeiw");
-    add_button->setObjectName("addButton");
+    add_button->setObjectName("buttonAdd");
+    start_button->setObjectName("buttonStart");
+    pause_button->setObjectName("buttonPause");
+    remove_button->setObjectName("buttonRemove");
+    add_button->setMinimumSize(QSize(85,30));
+    start_button->setMinimumSize(QSize(60,30));
+    pause_button->setMinimumSize(QSize(60,30));
+    remove_button->setMinimumSize(QSize(60,30));
 }
 
 void DownLoaderUI::addTaskWindows() {
 
     taskListView = new TaskListView(this);
-    add_button = new QPushButton(tr("新建任务"));
-    start_button = new QPushButton(tr("开始"));
-    pause_button = new QPushButton(tr("暂停"));
-    remove_button = new QPushButton(tr("删除"));
+
+
+    add_button = new QPushButton(this);
+
+    start_button = new QPushButton(this);
+    pause_button = new QPushButton(this);
+    remove_button = new QPushButton(this);
     QHBoxLayout *operateLayout = new QHBoxLayout();
 
     operateLayout->addWidget(add_button);
@@ -38,7 +50,7 @@ void DownLoaderUI::addTaskWindows() {
     operateLayout->addWidget(pause_button);
     operateLayout->addWidget(remove_button);
     operateLayout->addStretch();
-    operateLayout->setSpacing(0);
+    operateLayout->setSpacing(2);
     QVBoxLayout *main_layout = new QVBoxLayout();
 
     main_layout->addLayout(operateLayout);
@@ -61,6 +73,7 @@ void DownLoaderUI::addTaskWindows() {
 //更新下载任务列表显示
 void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
 {
+
     QList<QStringList> grid;
     QList<DownloadTask> &tasks = taskList.tasks;
 

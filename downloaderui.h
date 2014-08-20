@@ -11,6 +11,7 @@
 #include <QString>
 #include <QDialog>
 #include <QTimer>
+#include <QSplitter>
 #include "lib/xware_type.h"
 #include "tasklistview.h"
 #include "createtaskui.h"
@@ -53,6 +54,7 @@ private:
     QDialog infoDialog ;
     QLabel infolabel;
     QHBoxLayout infoLayout;
+
     void settingUI();
 signals:
     void add_signal(QString args,QString url,QString taskName);
