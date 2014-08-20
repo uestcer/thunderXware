@@ -10,6 +10,9 @@
 #include <QStackedWidget>
 #include <QLabel>
 #include <QMap>
+#include <QFile>
+#include <QTextStream>
+
 #include "lib/xware.h"
 #include "loginui.h"
 #include "lib/xware_type.h"

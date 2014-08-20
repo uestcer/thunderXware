@@ -1,0 +1,4 @@
+QWidget#topWidget
+{
+    background-image: url(":/icons/res/mainWindow/top.png");
+}

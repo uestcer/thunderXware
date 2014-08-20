@@ -40,7 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 void MainWindow::settingUI() {
 
-
+    //this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    ui->topWidget->setObjectName("topWidget");
 }
 
 void MainWindow::initConnectSignal() {
