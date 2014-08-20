@@ -10,7 +10,14 @@
         <file>res/downloaderUI/thumbbtn_newtask.ico</file>
         <file>res/downloaderUI/thumbbtn_pausealltask.ico</file>
         <file>res/downloaderUI/thumbbtn_startalltask.ico</file>
-        <file>res/mainWindow/top.png</file>
+        <file>res/mainWindow/btn_select.png</file>
+        <file>res/downloaderUI/delete.png</file>
+        <file>res/mainWindow/downloading.png</file>
+        <file>res/mainWindow/trash.png</file>
+        <file>res/mainWindow/complete.png</file>
+        <file>res/mainWindow/fail.png</file>
+        <file>res/mainWindow/logo.png</file>
+        <file>res/mainWindow/top_bg.png</file>
     </qresource>
     <qresource prefix="/qss">
         <file>qss/stylesheet.qss</file>

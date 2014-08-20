@@ -8,8 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    setMinimumWidth(1000);
-    setMinimumHeight(600);
+
     xware = new Xware(this);
     loginUI = new LoginUI();
     xwareControl = new ControlBinaryXware;
@@ -40,9 +39,17 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 void MainWindow::settingUI() {
 
-    //this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
     ui->topWidget->setObjectName("topWidget");
+    ui->logoWidget->setObjectName("logoWidget");
     ui->leftWidget->setObjectName("leftWidget");
+    ui->buttonDownloading->setObjectName("buttonDownloading");
+    ui->buttonComplete->setObjectName("buttonComplete");
+    ui->buttonTrash->setObjectName("buttonTrash");
+    ui->buttonFail->setObjectName("buttonFail");
+
+    buttonPress = ui->buttonDownloading;
+    buttonPress->setStyleSheet("background-image:url(:/icons/res/mainWindow/btn_select.png)");
 }
 
 void MainWindow::initConnectSignal() {
@@ -149,6 +156,9 @@ void MainWindow::on_buttonDownloading_clicked()
 {
 
 
+    buttonPress->setStyleSheet("background-color: #F1F3F5;");
+    buttonPress = ui->buttonDownloading;
+    buttonPress->setStyleSheet("background-image:url(:/icons/res/mainWindow/btn_select.png)");
     listType="0";
     xware->list();
     ui->stackedWidget->setCurrentIndex(0);
@@ -158,6 +168,9 @@ void MainWindow::on_buttonDownloading_clicked()
 void MainWindow::on_buttonComplete_clicked()
 {
 
+    buttonPress->setStyleSheet("background-color: #F1F3F5;");
+    buttonPress = ui->buttonComplete;
+    buttonPress->setStyleSheet("background-image:url(:/icons/res/mainWindow/btn_select.png)");
     listType="1";
     xware->list();
     ui->stackedWidget->setCurrentIndex(1);
@@ -166,6 +179,9 @@ void MainWindow::on_buttonComplete_clicked()
 void MainWindow::on_buttonTrash_clicked()
 {
 
+    buttonPress->setStyleSheet("background-color: #F1F3F5;");
+    buttonPress = ui->buttonTrash;
+    buttonPress->setStyleSheet("background-image:url(:/icons/res/mainWindow/btn_select.png)");
     listType="2";
     xware->list();
     ui->stackedWidget->setCurrentIndex(2);
@@ -174,7 +190,9 @@ void MainWindow::on_buttonTrash_clicked()
 
 void MainWindow::on_buttonFail_clicked()
 {
-
+    buttonPress->setStyleSheet("background-color: #F1F3F5;");
+    buttonPress = ui->buttonFail;
+    buttonPress->setStyleSheet("background-image:url(:/icons/res/mainWindow/btn_select.png)");
     listType = "3";
     xware->list();
     ui->stackedWidget->setCurrentIndex(3);

@@ -1,9 +1,16 @@
 QWidget#topWidget
 {
 
-    background-color: #4277B8 ;
-}
 
+    background-image:url(":/icons/res/mainWindow/top_bg.png");
+}
+QWidget#logoWidget
+{
+
+    background-image:url(":/icons/res/mainWindow/logo.png");
+    background-repeat:no-repeat;
+
+}
 QWidget#leftWidget
 {
     background-color:#DFE8F1 ;
@@ -11,5 +18,79 @@ QWidget#leftWidget
 
 
 QTableView#taskListVeiw{
+
     background-color:#EFF3F7;
 }
+
+
+QPushButton#buttonDownloading,
+QPushButton#buttonComplete,
+QPushButton#buttonTrash,
+QPushButton#buttonFail
+{
+    color: #000000;
+    background-color: #F1F3F5;
+    border-style:outset;
+    font-family: "Verdana";
+    font-size: 15px;
+    padding-left:4px;
+    text-align:left;
+
+
+}
+
+QPushButton#buttonDownloading
+{
+    image:url(":/icons/res/mainWindow/downloading.png");
+    image-position:right;
+}
+QPushButton#buttonComplete
+{
+    image:url(":/icons/res/mainWindow/complete.png");
+    image-position:right;
+}
+
+QPushButton#buttonTrash
+{
+    image:url(":/icons/res/mainWindow/trash.png");
+    image-position:right;
+}
+QPushButton#buttonFail
+{
+    image:url(":/icons/res/mainWindow/fail.png");
+    image-position:right;
+}
+QPushButton#buttonAdd
+{
+
+    background-image:url(":/icons/res/downloaderUI/thumbbtn_newtask.ico");
+    background-repeat:no-repeat;
+    background-position:center;
+    border-style:outset;
+    border-right-width:6px;
+    border-color:rgba(51,133,244,40);
+
+}
+
+QPushButton#buttonStart
+{
+    background-image:url(":/icons/res/downloaderUI/thumbbtn_startalltask.ico");
+    background-repeat:no-repeat;
+    background-position:center;
+    border:none;
+}
+QPushButton#buttonPause
+{
+    background-image:url(":/icons/res/downloaderUI/thumbbtn_pausealltask.ico");
+    background-repeat:no-repeat;
+    background-position:center;
+    border:none;
+}
+QPushButton#buttonRemove
+{
+    background-image:url(":/icons/res/downloaderUI/delete.png");
+    background-repeat:no-repeat;
+    background-position:center;
+    border:none;
+}
+

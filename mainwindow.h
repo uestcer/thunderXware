@@ -60,6 +60,7 @@ private:
     QMap<int,QString> indexPidMap;
 
     void settingUI() ;
+    QPushButton *buttonPress;//记录点击后的上面四个按键
 public slots:
     void coreCycle();
 
