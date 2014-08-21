@@ -42,6 +42,8 @@ private:
     QString perfectSize(QVariant value);
     //好看的下载任务状态
     QString perfectState(int state);
+
+    QString perfectRemainTime(quint64 value);
     Ui::DownLoaderUI *ui;
     TaskListView *taskListView;
 
@@ -56,6 +58,7 @@ private:
     QHBoxLayout infoLayout;
 
     void settingUI();
+
 signals:
     void add_signal(QString args,QString url,QString taskName);
     void start_signal(QString args);

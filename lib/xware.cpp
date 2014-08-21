@@ -11,6 +11,7 @@ static const QString API_HOMEPAGE_URL="http://yuancheng.xunlei.com";
 static const QString API_PROTOCOLS_URL_REMOTE="http://homecloud.yuancheng.xunlei.com";
 static const QString API_PROTOCOLS_URL="http://homecloud.yuancheng.xunlei.com";
 //static const QString API_PROTOCOLS_URL = "http://localhost:1111";
+
 Xware::Xware(QObject *parent): QObject(parent)
 {
     //将manager初始化为空指针
@@ -350,6 +351,7 @@ void Xware::listReplyFinished(QNetworkReply *reply) {
             dt.name = m["name"].toString();//下载文件名
             dt.path = m["path"].toString();//下载文件地址
             dt.progress = m["progress"].toInt();
+            dt.remainTime=m["remainTime"].toULongLong();
             dt.size = m["size"].toULongLong();
             dt.speed = m["speed"].toULongLong();
             dt.state = m["state"].toInt();

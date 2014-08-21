@@ -39,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 void MainWindow::settingUI() {
 
+    move ((QApplication::desktop()->width() - width())/2,
+          (QApplication::desktop()->height() - height())/2);
 
     ui->topWidget->setObjectName("topWidget");
     ui->logoWidget->setObjectName("logoWidget");

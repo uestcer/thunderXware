@@ -84,13 +84,13 @@ void DownLoaderUI::updateTaskView(DownloadTaskStatus taskList)
     for(int i = 0;i<tasks.size();i++) {
         QStringList row;
         DownloadTask item = tasks.at(i);
-        int time=item.remainTime/3600;
+
 
 
         row<<""<<item.name   //名称
            <<perfectSize(item.size) //大小
            <<QString::number((double)item.progress/100) //进度
-           <<QString::number(time)//剩余时间
+           <<perfectRemainTime(item.remainTime)//剩余时间
 
            <<perfectSize(item.speed)+"/s"//速度
            <<perfectState(item.state);//剩余时间
@@ -178,6 +178,24 @@ QString DownLoaderUI::perfectState(int state) {
         return "";
 
     }
+}
+QString DownLoaderUI::perfectRemainTime(quint64 value)
+{
+    QString timeStr;
+    if(value==0)
+        return "--:--:--";
+    int hour=value/3600;
+    value = value%3600;
+    int minute = value/60;
+    int second = value%60;
+
+    char buf[1024];
+
+    ::snprintf(buf, 1024, "%02d:%02d:%02d", hour,minute,second);
+    timeStr = QString::fromUtf8(buf);
+
+    return timeStr;
+
 }
 
 extern QString downloaderPID;
